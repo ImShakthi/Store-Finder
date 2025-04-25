@@ -1,6 +1,7 @@
 package com.skthvl.storefinder.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,6 +19,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Builder
+@Entity
 public class Store extends Auditable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,11 +63,14 @@ public class Store extends Auditable {
   private String locationType;
 
   @Column(nullable = false)
-  private String collectionPoint;
+  private boolean collectionPoint;
 
   @Column(nullable = false)
-  private String sapStoreID;
+  private String sapStoreId;
 
   @Column(nullable = false)
   private String todayClose;
+
+  @Column(nullable = false)
+  private String postalCode;
 }
