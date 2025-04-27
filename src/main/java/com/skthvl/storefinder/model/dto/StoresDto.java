@@ -9,6 +9,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Data Transfer Object that represents a collection of stores. Used for serializing and
+ * deserializing JSON data containing multiple store entries.
+ */
 @Setter
 @Getter
 @NoArgsConstructor
@@ -17,5 +21,6 @@ import lombok.ToString;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StoresDto {
+  /** List of individual store information objects. */
   private List<StoreDto> stores;
 }

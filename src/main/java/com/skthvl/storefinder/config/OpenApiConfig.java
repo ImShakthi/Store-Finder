@@ -13,6 +13,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration class for OpenAPI/Swagger documentation.
+ * Sets up API information, servers, security schemes and contact details.
+ */
 @Configuration
 public class OpenApiConfig {
 
@@ -22,8 +26,15 @@ public class OpenApiConfig {
   @Value("${store-finder.openapi.prod-url}")
   private String prodUrl;
 
+  /**
+   * Configures and provides the OpenAPI documentation bean.
+   * Sets up development and production servers, contact information,
+   * licensing, API information and JWT security requirements.
+   *
+   * @return Configured OpenAPI instance
+   */
   @Bean
-  public OpenAPI myOpenAPI() {
+  public OpenAPI myOpenApi() {
     final Server devServer = new Server();
     devServer.setUrl(devUrl);
     devServer.setDescription("Server URL in Development environment");
@@ -42,11 +53,11 @@ public class OpenApiConfig {
 
     final Info info =
         new Info()
-            .title("CineMetric API")
+            .title("Store-Finder API")
             .version("1.0")
             .contact(contact)
             .description(
-                "This API exposes endpoints to view hollywood movie details and rate them.")
+                "This API exposes endpoints to view store related details.")
             .termsOfService("https://www.imshakthi.github.io/terms")
             .license(mitLicense);
 

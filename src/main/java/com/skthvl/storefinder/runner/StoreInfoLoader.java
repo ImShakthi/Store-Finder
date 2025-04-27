@@ -17,6 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Component responsible for loading store information from JSON files into the database. Handles
+ * data migration tracking to prevent duplicate imports and provides file parsing capabilities.
+ */
 @Slf4j
 @Component
 public class StoreInfoLoader {
@@ -25,6 +29,15 @@ public class StoreInfoLoader {
   private final StoreRepository storeRepository;
   private final DataFileMigrationRepository dataFileMigrationRepository;
 
+  /**
+   * Constructs a new instance of the StoreInfoLoader class to handle operations related to loading
+   * and managing store information.
+   *
+   * @param storeMapper the mapper responsible for converting StoreDto objects to Store entities
+   * @param storeRepository the repository interface for storing and retrieving Store entities
+   * @param dataFileMigrationRepository the repository interface for tracking and managing file
+   *     migration records
+   */
   public StoreInfoLoader(
       final StoreMapper storeMapper,
       final StoreRepository storeRepository,
@@ -34,6 +47,12 @@ public class StoreInfoLoader {
     this.dataFileMigrationRepository = dataFileMigrationRepository;
   }
 
+  /**
+   * Loads store data from a JSON file into the database. Checks for existing migrations using MD5
+   * checksum to prevent duplicate imports.
+   *
+   * @param filePath path to the JSON file containing store data
+   */
   @Transactional
   public void loadDataIntoDatabase(final String filePath) {
     try {
@@ -60,10 +79,23 @@ public class StoreInfoLoader {
     }
   }
 
+  /**
+   * Checks if the file has already been migrated by comparing file path and checksum.
+   *
+   * @param filePath path to the file being checked
+   * @param fileChecksum MD5 checksum of the file
+   * @return true if file was already migrated, false otherwise
+   */
   private boolean hasDataAlreadyMigrated(final String filePath, final String fileChecksum) {
     return dataFileMigrationRepository.existsByFilePathAndFileChecksum(filePath, fileChecksum);
   }
 
+  /**
+   * Parses store data from a JSON file into a list of StoreDto objects.
+   *
+   * @param fileName name of the JSON file to parse
+   * @return List of parsed StoreDto objects, empty list if parsing fails
+   */
   private List<StoreDto> getStoresFromJsonFile(final String fileName) {
     try {
       final ObjectMapper objectMapper = new ObjectMapper();

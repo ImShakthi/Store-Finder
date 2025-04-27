@@ -6,12 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/** Response object for store information in the Store Finder application. */
 @Setter
 @Getter
-//@NoArgsConstructor
-//@AllArgsConstructor
 @ToString
 @Builder
-public class StoreResponse {
-
-}
+public class StoreResponse {}

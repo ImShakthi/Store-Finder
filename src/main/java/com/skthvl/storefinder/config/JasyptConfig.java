@@ -7,12 +7,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration class for Jasypt encryption service. Provides encryption capabilities for sensitive
+ * application properties.
+ */
 @Configuration
 public class JasyptConfig {
 
   @Value("${store-finder.env.jasypt-encryptor-password}")
   private String jasyptEncryptorPassword;
 
+  /**
+   * Creates and configures a pooled PBE string encryptor using MD5 and DES encryption.
+   *
+   * @return configured StringEncryptor bean for property encryption
+   */
   @Bean("jasyptStringEncryptor")
   public StringEncryptor stringEncryptor() {
 

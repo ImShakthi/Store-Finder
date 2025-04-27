@@ -19,6 +19,10 @@ import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.stereotype.Component;
 
+/**
+ * Maps StoreDto objects to Store entities while managing caching of City, Address, and
+ * StoreLocationType entities to improve performance during bulk operations.
+ */
 @Slf4j
 @Component
 public class StoreMapper {
@@ -27,11 +31,26 @@ public class StoreMapper {
   private final ConcurrentHashMap<String, StoreLocationType> locTypeCache =
       new ConcurrentHashMap<>();
 
+  /** Repository for managing City entities. */
   private final CityRepository cityRepository;
+
+  /** Repository for managing Address entities. */
   private final AddressRepository addressRepository;
+
+  /** Repository for managing StoreLocationType entities. */
   private final StoreLocationTypeRepository storeLocationTypeRepository;
+
+  /** Factory for creating geometric objects with SRID 4326. */
   private final GeometryFactory geometryFactory;
 
+  /**
+   * Constructs a new instance of the StoreMapper class and initializes the required repositories
+   * and resources.
+   *
+   * @param cityRepository Repository for managing City entities.
+   * @param addressRepository Repository for managing Address entities.
+   * @param storeLocationTypeRepository Repository for managing StoreLocationType entities.
+   */
   public StoreMapper(
       final CityRepository cityRepository,
       final AddressRepository addressRepository,
@@ -43,6 +62,12 @@ public class StoreMapper {
     this.geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
   }
 
+  /**
+   * Converts a StoreDto to a Store entity, handling the creation and caching of related entities.
+   *
+   * @param storeDto The DTO containing store information
+   * @return A Store entity with all properties mapped from the DTO
+   */
   public Store toStore(final StoreDto storeDto) {
 
     final var address = getAddress(storeDto);
@@ -57,7 +82,7 @@ public class StoreMapper {
         .city(city)
         .storeLocationType(locType)
         .uuid(storeDto.getUuid())
-        .sapStoreId(storeDto.getSapStoreID())
+        .sapStoreId(storeDto.getSapStoreId())
         .complexNumber(storeDto.getComplexNumber())
         .location(getLocation(storeDto))
         .showWarningMessage(storeDto.isShowWarningMessage())
@@ -102,6 +127,12 @@ public class StoreMapper {
     return StoreLocationType.builder().name(storeDto.getLocationType()).build();
   }
 
+  /**
+   * Generates a unique key for address caching based on store location details.
+   *
+   * @param storeDto The DTO containing store address information
+   * @return A concatenated string key of city, address name, street, and postal code
+   */
   public String generateAddressKey(final StoreDto storeDto) {
     return String.format(
         "%s-%s-%s-%s",

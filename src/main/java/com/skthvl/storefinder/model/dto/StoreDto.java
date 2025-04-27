@@ -9,6 +9,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Data Transfer Object representing store information for the Store Finder application.
+ * Contains store location, identification, and operational details.
+ */
 @Setter
 @Getter
 @NoArgsConstructor
@@ -16,23 +20,36 @@ import lombok.ToString;
 @ToString
 @Builder
 public class StoreDto implements Serializable {
+  /** Unique identifier for the store. */
   private String uuid;
-  private String sapStoreID;
+  /** SAP system store identifier. */
+  private String sapStoreId;
+  /** Store's geographical longitude. */
   private String longitude;
+  /** Store's geographical latitude. */
   private String latitude;
+  /** Complex number identifier. */
   private String complexNumber;
+  /** Flag indicating if warning message should be displayed. */
   private boolean showWarningMessage;
+  /** Flag indicating if store is a collection point. */
   private boolean collectionPoint;
+  /** Store opening time for current day. */
   private String todayOpen;
+  /** Store closing time for current day. */
   private String todayClose;
-
+  /** City where store is located. */
   private String city;
-
+  /** Type of store location. */
   private String locationType;
-
+  /** Primary street address. */
   private String street;
+  /** Secondary street address. */
   private String street2;
+  /** Additional street address. */
   private String street3;
+  /** Display name for the store address. */
   private String addressName;
+  /** Postal code of store location. */
   private String postalCode;
 }

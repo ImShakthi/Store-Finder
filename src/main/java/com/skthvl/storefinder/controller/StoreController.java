@@ -1,8 +1,8 @@
 package com.skthvl.storefinder.controller;
 
-import com.skthvl.storefinder.StoreService;
 import com.skthvl.storefinder.model.dto.StoreDistanceDto;
 import com.skthvl.storefinder.model.request.LocationRequest;
+import com.skthvl.storefinder.service.StoreService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PostMapping;

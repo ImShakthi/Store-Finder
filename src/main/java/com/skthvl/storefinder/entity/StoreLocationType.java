@@ -13,6 +13,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Entity representing different types of store locations in the system.
+ * Used to categorize stores based on their type.
+ */
 @Setter
 @Getter
 @NoArgsConstructor
@@ -21,13 +25,22 @@ import lombok.ToString;
 @Builder
 @Entity
 public class StoreLocationType {
+  /**
+   * Unique identifier for the store location type.
+   */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false, updatable = false)
   private BigInteger id;
-
+  
+  /**
+   * Name of the store location type.
+   */
   @Column(nullable = false)
   private String name;
-
+  
+  /**
+   * Optional description providing additional details about the store location type.
+   */
   @Column private String description;
 }

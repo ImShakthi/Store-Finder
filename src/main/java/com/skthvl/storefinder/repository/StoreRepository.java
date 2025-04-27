@@ -10,8 +10,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+/** Repository for managing store entities with spatial search capabilities using PostGIS. */
 @Repository
 public interface StoreRepository extends JpaRepository<Store, BigInteger> {
+  /**
+   * Retrieves stores ordered by distance from specified coordinates.
+   *
+   * @param longitude WGS84 longitude coordinate
+   * @param latitude WGS84 latitude coordinate
+   * @param pageable pagination parameters
+   * @return paginated list of stores with their distances
+   */
   @Query(
       value =
           """
