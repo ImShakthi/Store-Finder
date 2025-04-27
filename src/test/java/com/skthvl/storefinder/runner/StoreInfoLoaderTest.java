@@ -72,7 +72,7 @@ class StoreInfoLoaderTest {
         .city(city)
         .storeLocationType(locType)
         .uuid(storeDto.getUuid())
-        .sapStoreId(storeDto.getSapStoreID())
+        .sapStoreId(storeDto.getSapStoreId())
         .complexNumber(storeDto.getComplexNumber())
         .location(new Point(null, null))
         .showWarningMessage(storeDto.isShowWarningMessage())

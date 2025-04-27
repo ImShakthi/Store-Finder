@@ -10,6 +10,7 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.xml
     default-schema: public
   jpa:
+    open-in-view: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none

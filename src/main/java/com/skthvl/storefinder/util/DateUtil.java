@@ -1,6 +1,6 @@
 package com.skthvl.storefinder.util;
 
-import com.skthvl.storefinder.exception.InvalidTimeFormatException;
+import com.skthvl.storefinder.exception.type.InvalidTimeFormatException;
 import java.time.LocalTime;
 import java.util.Arrays;
 

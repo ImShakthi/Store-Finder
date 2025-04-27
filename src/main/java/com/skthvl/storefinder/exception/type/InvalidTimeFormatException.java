@@ -1,4 +1,4 @@
-package com.skthvl.storefinder.exception;
+package com.skthvl.storefinder.exception.type;
 
 /**
  * Exception thrown when a time format is invalid or cannot be parsed correctly.

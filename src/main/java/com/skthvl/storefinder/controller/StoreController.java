@@ -2,9 +2,11 @@ package com.skthvl.storefinder.controller;
 
 import com.skthvl.storefinder.model.dto.StoreDistanceDto;
 import com.skthvl.storefinder.model.request.LocationRequest;
+import com.skthvl.storefinder.model.response.PaginatedResponse;
 import com.skthvl.storefinder.service.StoreService;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * REST controller for managing store-related operations.
- * Provides endpoints for retrieving store information based on geographical location.
+ * REST controller for managing store-related operations. Provides endpoints for retrieving store
+ * information based on geographical location.
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/stores")
 public class StoreController {
@@ -38,11 +41,15 @@ public class StoreController {
    * @return Page of StoreDistanceDto containing nearest stores with their distances
    */
   @PostMapping("/nearest")
-  public Page<StoreDistanceDto> getNearestStores(
+  public ResponseEntity<PaginatedResponse<StoreDistanceDto>> getNearestStores(
       @Valid @RequestBody final LocationRequest locationRequest,
       @RequestParam(defaultValue = "0") final int page,
       @RequestParam(defaultValue = "5") final int size) {
-    return storeService.findNearestStores(
-        locationRequest.getLongitude(), locationRequest.getLatitude(), page, size);
+
+    final var storeDistanceDto =
+        storeService.findNearestStores(
+            locationRequest.getLongitude(), locationRequest.getLatitude(), page, size);
+
+    return ResponseEntity.ok().body(new PaginatedResponse<>(storeDistanceDto));
   }
 }

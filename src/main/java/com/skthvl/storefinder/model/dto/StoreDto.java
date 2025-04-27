@@ -1,6 +1,7 @@
 package com.skthvl.storefinder.model.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ public class StoreDto implements Serializable {
   /** Unique identifier for the store. */
   private String uuid;
   /** SAP system store identifier. */
+  @JsonProperty("sapStoreID")
   private String sapStoreId;
   /** Store's geographical longitude. */
   private String longitude;

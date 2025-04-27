@@ -2,14 +2,16 @@ package com.skthvl.storefinder.service;
 
 import com.skthvl.storefinder.model.dto.StoreDistanceDto;
 import com.skthvl.storefinder.repository.StoreRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 /**
- * Service class for managing store-related operations and queries.
- * Provides functionality for finding nearest stores based on geographical coordinates.
+ * Service class for managing store-related operations and queries. Provides functionality for
+ * finding nearest stores based on geographical coordinates.
  */
+@Slf4j
 @Service
 public class StoreService {
   private final StoreRepository storeRepository;
