@@ -1,5 +1,7 @@
 package com.skthvl.storefinder.runner;
 
+import com.skthvl.storefinder.mapper.StoreMapper;
+import com.skthvl.storefinder.repository.DataFileMigrationRepository;
 import com.skthvl.storefinder.repository.StoreRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,13 +12,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class StoreInfoLoaderTest {
 
-  @Mock StoreRepository storeRepository;
+  @Mock private StoreRepository storeRepository;
+  @Mock private StoreMapper storeMapper;
+  @Mock private DataFileMigrationRepository dataFileMigrationRepository;
 
   private StoreInfoLoader storeInfoLoader;
 
   @BeforeEach
   void setUp() {
-    storeInfoLoader = new StoreInfoLoader(storeRepository);
+    storeInfoLoader =
+        new StoreInfoLoader(storeMapper, storeRepository, dataFileMigrationRepository);
   }
 
   @Test

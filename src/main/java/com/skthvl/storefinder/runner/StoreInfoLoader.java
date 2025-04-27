@@ -44,7 +44,11 @@ public class StoreInfoLoader {
       }
 
       final var stores =
-          getStoresFromJsonFile(filePath).stream().map(storeMapper::toStore).toList();
+          getStoresFromJsonFile(filePath).stream()
+              .map(storeMapper::toStore)
+              .peek(store -> log.info(">>> store ={}", store))
+              .toList();
+
       log.debug("Found {} stores in file {}", stores.size(), filePath);
       storeRepository.saveAll(stores);
 

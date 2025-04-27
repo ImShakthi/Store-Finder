@@ -6,11 +6,43 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
 
     <changeSet id="0001_create_store_table" author="sakthivel balasubramaniam">
-        <createTable tableName="store">
+
+        <sql>
+            CREATE EXTENSION IF NOT EXISTS postgis;
+        </sql>
+
+        <createTable tableName="store_location_type">
             <column name="id" type="BIGSERIAL" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="city" type="VARCHAR(255)">
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="city">
+            <column name="id" type="BIGSERIAL" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="address">
+            <column name="id" type="BIGSERIAL" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="postal_code" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address_name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="street" type="VARCHAR(255)">
@@ -22,40 +54,51 @@
             <column name="street3" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="address_name" type="VARCHAR(255)">
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
+            <column name="updated_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+
+        <createTable tableName="store">
+            <column name="id" type="BIGSERIAL" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="city_id" type="BIGSERIAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address_id" type="BIGSERIAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location_type_id" type="BIGSERIAL">
+                <constraints nullable="false"/>
+            </column>
+
             <column name="uuid" type="VARCHAR(255)">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="longitude" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+            <column name="sap_store_id" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
             </column>
-            <column name="latitude" type="VARCHAR(255)">
+            <column name="location" type="GEOGRAPHY(Point,4326)">
                 <constraints nullable="false"/>
             </column>
             <column name="complex_number" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="today_open" type="time">
+                <constraints nullable="true"/>
+            </column>
+            <column name="today_close" type="time">
+                <constraints nullable="true"/>
+            </column>
             <column name="show_warning_message" type="boolean" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
-            <column name="today_open" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="location_type" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
             <column name="collection_point" type="BOOLEAN" defaultValueBoolean="false">
-                <constraints nullable="false"/>
-            </column>
-            <column name="sap_store_id" type="VARCHAR(255)">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="today_close" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="postal_code" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE" defaultValueComputed="CURRENT_TIMESTAMP">
@@ -65,5 +108,29 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="store"
+                baseColumnNames="city_id"
+                referencedTableName="city"
+                referencedColumnNames="id"
+                constraintName="fk_store_city_id"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="store"
+                baseColumnNames="address_id"
+                referencedTableName="address"
+                referencedColumnNames="id"
+                constraintName="fk_store_address_id"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="store"
+                baseColumnNames="location_type_id"
+                referencedTableName="store_location_type"
+                referencedColumnNames="id"
+                constraintName="fk_store_location_type_id"
+                onDelete="CASCADE"/>
     </changeSet>
 </databaseChangeLog>

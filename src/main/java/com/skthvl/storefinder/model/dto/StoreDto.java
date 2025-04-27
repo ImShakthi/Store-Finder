@@ -1,5 +1,6 @@
 package com.skthvl.storefinder.model.dto;
 
+
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,20 +16,23 @@ import lombok.ToString;
 @ToString
 @Builder
 public class StoreDto implements Serializable {
-  private String city;
-  private String street;
-  private String street2;
-  private String street3;
-  private String addressName;
   private String uuid;
+  private String sapStoreID;
   private String longitude;
   private String latitude;
   private String complexNumber;
   private boolean showWarningMessage;
-  private String todayOpen;
-  private String locationType;
   private boolean collectionPoint;
-  private String sapStoreID;
+  private String todayOpen;
   private String todayClose;
+
+  private String city;
+
+  private String locationType;
+
+  private String street;
+  private String street2;
+  private String street3;
+  private String addressName;
   private String postalCode;
 }
