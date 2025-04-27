@@ -11,8 +11,8 @@ import com.skthvl.storefinder.model.dto.StoresDto;
 import com.skthvl.storefinder.repository.DataFileMigrationRepository;
 import com.skthvl.storefinder.repository.StoreRepository;
 import com.skthvl.storefinder.util.FileUtil;
-import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,10 +46,9 @@ public class StoreInfoLoader {
       final var stores =
           getStoresFromJsonFile(filePath).stream()
               .map(storeMapper::toStore)
-              .peek(store -> log.info(">>> store ={}", store))
+              .filter(Objects::nonNull)
               .toList();
 
-      log.debug("Found {} stores in file {}", stores.size(), filePath);
       storeRepository.saveAll(stores);
 
       final var dataFileMigration =
@@ -69,12 +68,10 @@ public class StoreInfoLoader {
     try {
       final ObjectMapper objectMapper = new ObjectMapper();
 
-      final var fileUri =
-          requireNonNull(getClass().getClassLoader().getResource(fileName), "file not found")
-              .toURI();
+      final var resource =
+          requireNonNull(getClass().getClassLoader().getResource(fileName), "file not found");
 
-      // convert a JSON string to a Book object
-      final var storesDto = objectMapper.readValue(Paths.get(fileUri).toFile(), StoresDto.class);
+      final var storesDto = objectMapper.readValue(resource, StoresDto.class);
 
       requireNonNull(storesDto, "storesDto cannot be null");
 

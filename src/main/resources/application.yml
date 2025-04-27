@@ -6,14 +6,14 @@ spring:
     name: Store-Finder
   liquibase:
     enabled: true
-    drop-first: true
+    drop-first: false
     change-log: classpath:db/changelog/db.changelog-master.xml
     default-schema: public
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect

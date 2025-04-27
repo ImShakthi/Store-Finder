@@ -1,18 +1,16 @@
 package com.skthvl.storefinder.mapper;
 
+import static com.skthvl.storefinder.util.DateUtil.parseTime;
 import static java.lang.Double.parseDouble;
 
 import com.skthvl.storefinder.entity.Address;
 import com.skthvl.storefinder.entity.City;
 import com.skthvl.storefinder.entity.Store;
 import com.skthvl.storefinder.entity.StoreLocationType;
-import com.skthvl.storefinder.exception.InvalidTimeFormatException;
 import com.skthvl.storefinder.model.dto.StoreDto;
 import com.skthvl.storefinder.repository.AddressRepository;
 import com.skthvl.storefinder.repository.CityRepository;
 import com.skthvl.storefinder.repository.StoreLocationTypeRepository;
-import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.locationtech.jts.geom.Coordinate;
@@ -48,11 +46,11 @@ public class StoreMapper {
   public Store toStore(final StoreDto storeDto) {
 
     final var address = getAddress(storeDto);
-    log.info("address is {}", address);
+    log.debug("address is {}", address);
     final var city = getCity(storeDto);
-    log.info("city is {}", city);
+    log.debug("city is {}", city);
     final var locType = getLocType(storeDto);
-    log.info("location type is {}", locType);
+    log.debug("location type is {}", locType);
 
     return Store.builder()
         .address(address)
@@ -71,19 +69,16 @@ public class StoreMapper {
 
   private Address getAddress(final StoreDto storeDto) {
     final var key = generateAddressKey(storeDto);
-    log.info("key for address is {}", key);
     return addressCache.computeIfAbsent(
         key, s -> addressRepository.save(populateAddress(storeDto)));
   }
 
   private City getCity(final StoreDto storeDto) {
-    log.info("key for city is {}", storeDto.getCity());
     return cityCache.computeIfAbsent(
         storeDto.getCity(), s -> cityRepository.save(populateCity(storeDto)));
   }
 
   private StoreLocationType getLocType(final StoreDto storeDto) {
-    log.info("key for location type is {}", storeDto.getLocationType());
     return locTypeCache.computeIfAbsent(
         storeDto.getLocationType(),
         s -> storeLocationTypeRepository.save(populateLocType(storeDto)));
@@ -105,17 +100,6 @@ public class StoreMapper {
 
   private StoreLocationType populateLocType(final StoreDto storeDto) {
     return StoreLocationType.builder().name(storeDto.getLocationType()).build();
-  }
-
-  private LocalTime parseTime(final String time) {
-    if ("GESLOTEN".equalsIgnoreCase(time)) {
-      return null;
-    }
-    final var hourAndMinutes = Arrays.stream(time.split(":")).map(Integer::parseInt).toList();
-    if (hourAndMinutes.size() != 2) {
-      throw new InvalidTimeFormatException();
-    }
-    return LocalTime.of(hourAndMinutes.getFirst(), hourAndMinutes.getLast());
   }
 
   public String generateAddressKey(final StoreDto storeDto) {

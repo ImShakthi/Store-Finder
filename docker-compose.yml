@@ -1,0 +1,46 @@
+services:
+  postgis:
+    image: postgis/postgis:17-3.4
+    environment:
+      - POSTGRES_DB=storefinder
+      - POSTGRES_USER=${SPRING_DATASOURCE_USERNAME}
+      - POSTGRES_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgis_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+  app:
+    build: .
+    depends_on:
+      - redis
+      - postgis
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgis:5432/storefinder
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - JASYPT_ENCRYPTOR_PASSWORD=${JASYPT_ENCRYPTOR_PASSWORD}
+      - SPRING_REDIS_HOST=${SPRING_REDIS_HOST}
+      - SPRING_REDIS_PORT=${SPRING_REDIS_PORT}
+      - SPRING_REDIS_USERNAME=${SPRING_REDIS_USERNAME}
+      - SPRING_REDIS_PASSWORD=${SPRING_REDIS_PASSWORD}
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    command: [ "sh", "-c", "/wait-for-it.sh postgis:5432 -- java -jar app.jar"]
+
+volumes:
+  postgis_data:
+
+networks:
+  app-network:
