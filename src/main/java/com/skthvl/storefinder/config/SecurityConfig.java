@@ -44,7 +44,8 @@ public class SecurityConfig {
         "/configuration/security"
       };
 
-  private static final String[] PUBLIC_NO_AUTH_APP_APIs = new String[] {"/api/v1/stores/nearest"};
+  private static final String[] PUBLIC_NO_AUTH_APP_APIs =
+      new String[] {"/api/v1/stores/nearest", "/api/v1/stores", "/api/v1/stores/{storeId}"};
 
   private static final String[] AUTH_APP_APIs = new String[] {};
 

@@ -1,7 +1,6 @@
 package com.skthvl.storefinder.mapper;
 
-import static com.skthvl.storefinder.util.DateUtil.parseTime;
-import static java.lang.Double.parseDouble;
+import static java.util.Objects.isNull;
 
 import com.skthvl.storefinder.entity.Address;
 import com.skthvl.storefinder.entity.City;
@@ -11,6 +10,7 @@ import com.skthvl.storefinder.model.dto.StoreDto;
 import com.skthvl.storefinder.repository.AddressRepository;
 import com.skthvl.storefinder.repository.CityRepository;
 import com.skthvl.storefinder.repository.StoreLocationTypeRepository;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.locationtech.jts.geom.Coordinate;
@@ -18,6 +18,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Maps StoreDto objects to Store entities while managing caching of City, Address, and
@@ -68,8 +69,8 @@ public class StoreMapper {
    * @param storeDto The DTO containing store information
    * @return A Store entity with all properties mapped from the DTO
    */
+  @Transactional
   public Store toStore(final StoreDto storeDto) {
-
     final var address = getAddress(storeDto);
     log.debug("address is {}", address);
     final var city = getCity(storeDto);
@@ -81,14 +82,14 @@ public class StoreMapper {
         .address(address)
         .city(city)
         .storeLocationType(locType)
-        .uuid(storeDto.getUuid())
+        .uuid(getUuid(storeDto))
         .sapStoreId(storeDto.getSapStoreId())
         .complexNumber(storeDto.getComplexNumber())
         .location(getLocation(storeDto))
         .showWarningMessage(storeDto.isShowWarningMessage())
         .collectionPoint(storeDto.isCollectionPoint())
-        .todayClose(parseTime(storeDto.getTodayClose()))
-        .todayOpen(parseTime(storeDto.getTodayOpen()))
+        .todayClose(storeDto.getTodayClose())
+        .todayOpen(storeDto.getTodayOpen())
         .build();
   }
 
@@ -127,23 +128,23 @@ public class StoreMapper {
     return StoreLocationType.builder().name(storeDto.getLocationType()).build();
   }
 
-  /**
-   * Generates a unique key for address caching based on store location details.
-   *
-   * @param storeDto The DTO containing store address information
-   * @return A concatenated string key of city, address name, street, and postal code
-   */
-  public String generateAddressKey(final StoreDto storeDto) {
+  private String generateAddressKey(final StoreDto storeDto) {
     return String.format(
-        "%s-%s-%s-%s",
+        "%s-%s-%s-%s-%s-%s",
         storeDto.getCity(),
         storeDto.getAddressName(),
         storeDto.getStreet(),
+        storeDto.getStreet2(),
+        storeDto.getStreet3(),
         storeDto.getPostalCode());
   }
 
-  public Point getLocation(final StoreDto storeDto) {
+  private Point getLocation(final StoreDto storeDto) {
     return geometryFactory.createPoint(
-        new Coordinate(parseDouble(storeDto.getLongitude()), parseDouble(storeDto.getLatitude())));
+        new Coordinate(storeDto.getLongitude(), storeDto.getLatitude()));
+  }
+
+  private String getUuid(final StoreDto storeDto) {
+    return isNull(storeDto.getUuid()) ? UUID.randomUUID().toString() : storeDto.getUuid();
   }
 }

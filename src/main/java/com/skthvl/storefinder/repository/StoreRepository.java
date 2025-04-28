@@ -3,6 +3,7 @@ package com.skthvl.storefinder.repository;
 import com.skthvl.storefinder.entity.Store;
 import com.skthvl.storefinder.model.dto.StoreDistanceDto;
 import java.math.BigInteger;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -54,4 +55,8 @@ public interface StoreRepository extends JpaRepository<Store, BigInteger> {
       @Param("longitude") final double longitude,
       @Param("latitude") final double latitude,
       final Pageable pageable);
+
+  void deleteByUuid(String uuid);
+
+  Optional<Store> findByUuid(final String uuid);
 }

@@ -11,7 +11,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="description" type="VARCHAR(255)">
                 <constraints nullable="true"/>
@@ -23,7 +23,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="description" type="VARCHAR(255)">
                 <constraints nullable="true"/>
@@ -38,7 +38,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="address_name" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="street" type="VARCHAR(255)">
                 <constraints nullable="false"/>
@@ -82,12 +82,12 @@
                 <constraints nullable="false"/>
             </column>
             <column name="complex_number" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
-            <column name="today_open" type="time">
+            <column name="today_open" type="TIME WITHOUT TIME ZONE">
                 <constraints nullable="true"/>
             </column>
-            <column name="today_close" type="time">
+            <column name="today_close" type="TIME WITHOUT TIME ZONE">
                 <constraints nullable="true"/>
             </column>
             <column name="show_warning_message" type="boolean" defaultValueBoolean="false">

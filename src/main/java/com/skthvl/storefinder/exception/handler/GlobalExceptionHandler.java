@@ -4,12 +4,16 @@ import com.skthvl.storefinder.model.response.ErrorResponse;
 import jakarta.validation.ConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Slf4j
 @ControllerAdvice
@@ -23,8 +27,30 @@ public class GlobalExceptionHandler {
    * @return ResponseEntity containing the error message with HTTP status 400 (BAD_REQUEST)
    */
   @ExceptionHandler(IllegalArgumentException.class)
-  public ResponseEntity<ErrorResponse> handleIllegalArgument(final IllegalArgumentException ex) {
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(ex.getMessage()));
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ErrorResponse handleIllegalArgument(final IllegalArgumentException ex) {
+    return new ErrorResponse(ex.getMessage());
+  }
+
+  /**
+   * Handles {@link DataIntegrityViolationException} by returning a BAD_REQUEST response with the
+   * exception message.
+   *
+   * @param ex the DataIntegrityViolationException that was thrown
+   * @return ResponseEntity containing the error message with HTTP status 400 (BAD_REQUEST)
+   */
+  @ExceptionHandler(DataIntegrityViolationException.class)
+  public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(
+      final DataIntegrityViolationException ex) {
+
+    final String fullMessage =
+        ex.getRootCause() != null ? ex.getRootCause().getMessage() : ex.getMessage();
+    final String constraintMessage = extractConstraintViolationMessage(fullMessage);
+
+    final String message =
+        (constraintMessage != null) ? constraintMessage : "Conflict: Record already exists.";
+
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(message));
   }
 
   /**
@@ -36,8 +62,8 @@ public class GlobalExceptionHandler {
    *     (BAD_REQUEST)
    */
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<Map<String, String>> handleValidationException(
-      MethodArgumentNotValidException ex) {
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public Map<String, String> handleValidationException(MethodArgumentNotValidException ex) {
     final Map<String, String> errors = new HashMap<>();
 
     ex.getBindingResult()
@@ -46,7 +72,7 @@ public class GlobalExceptionHandler {
             error -> {
               errors.put(error.getField(), error.getDefaultMessage());
             });
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    return errors;
   }
 
   /**
@@ -58,8 +84,8 @@ public class GlobalExceptionHandler {
    *     400 (BAD_REQUEST)
    */
   @ExceptionHandler(ConstraintViolationException.class)
-  public ResponseEntity<Map<String, String>> handleConstraintViolationException(
-      ConstraintViolationException ex) {
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public Map<String, String> handleConstraintViolationException(ConstraintViolationException ex) {
     final Map<String, String> errors = new HashMap<>();
 
     ex.getConstraintViolations()
@@ -69,13 +95,27 @@ public class GlobalExceptionHandler {
               String message = violation.getMessage();
               errors.put(field, message);
             });
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    return errors;
   }
 
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<ErrorResponse> handleGeneric(final Exception ex) {
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public ErrorResponse handleGeneric(final Exception ex) {
     ex.printStackTrace();
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(new ErrorResponse("something went wrong, please try again later"));
+    return new ErrorResponse("something went wrong, please try again later");
+  }
+
+  private String extractConstraintViolationMessage(final String fullMessage) {
+    if (fullMessage == null) {
+      return null;
+    }
+
+    final Pattern pattern = Pattern.compile("ERROR:\\s*(.+?)\\n");
+    final Matcher matcher = pattern.matcher(fullMessage);
+
+    if (matcher.find()) {
+      return matcher.group(1).trim();
+    }
+    return null;
   }
 }

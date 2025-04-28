@@ -78,13 +78,21 @@ public class Store extends Auditable {
   private boolean collectionPoint;
 
   /** Store opening time for current day. */
-  @Column private LocalTime todayOpen;
+  @Column(name="today_open") private LocalTime todayOpen;
 
   /** Store closing time for current day. */
   @Column private LocalTime todayClose;
 
   /** Check if store is closed based on operating hours. */
-  private boolean isStoreClosed() {
+  public boolean isStoreClosed() {
     return isNull(todayOpen) && isNull(todayClose);
+  }
+
+  public double getLongitude() {
+    return location.getCoordinate().x;
+  }
+
+  public double getLatitude() {
+    return location.getCoordinate().y;
   }
 }

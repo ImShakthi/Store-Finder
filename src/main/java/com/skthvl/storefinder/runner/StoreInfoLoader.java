@@ -24,24 +24,26 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Component
 public class StoreInfoLoader {
-
+  private final ObjectMapper objectMapper;
   private final StoreMapper storeMapper;
   private final StoreRepository storeRepository;
   private final DataFileMigrationRepository dataFileMigrationRepository;
 
   /**
-   * Constructs a new instance of the StoreInfoLoader class to handle operations related to loading
-   * and managing store information.
+   * Constructs an instance of the StoreInfoLoader, initializing the required dependencies for
+   * processing store information and managing data migration.
    *
-   * @param storeMapper the mapper responsible for converting StoreDto objects to Store entities
-   * @param storeRepository the repository interface for storing and retrieving Store entities
-   * @param dataFileMigrationRepository the repository interface for tracking and managing file
-   *     migration records
+   * @param objectMapper Utility for JSON serialization and deserialization tasks
+   * @param storeMapper Mapper for converting StoreDto objects to Store entities and managing related dependencies
+   * @param storeRepository Repository for managing Store entities and operations
+   * @param dataFileMigrationRepository Repository for tracking and verifying data file migrations
    */
   public StoreInfoLoader(
+      final ObjectMapper objectMapper,
       final StoreMapper storeMapper,
       final StoreRepository storeRepository,
       final DataFileMigrationRepository dataFileMigrationRepository) {
+    this.objectMapper = objectMapper;
     this.storeMapper = storeMapper;
     this.storeRepository = storeRepository;
     this.dataFileMigrationRepository = dataFileMigrationRepository;
@@ -98,8 +100,6 @@ public class StoreInfoLoader {
    */
   private List<StoreDto> getStoresFromJsonFile(final String fileName) {
     try {
-      final ObjectMapper objectMapper = new ObjectMapper();
-
       final var resource =
           requireNonNull(getClass().getClassLoader().getResource(fileName), "file not found");
 

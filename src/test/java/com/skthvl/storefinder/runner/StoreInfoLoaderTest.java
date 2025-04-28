@@ -1,6 +1,5 @@
 package com.skthvl.storefinder.runner;
 
-import static com.skthvl.storefinder.util.DateUtil.parseTime;
 import static java.util.Objects.requireNonNull;
 import static org.mockito.Mockito.when;
 
@@ -27,6 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class StoreInfoLoaderTest {
 
+  @Mock private ObjectMapper objectMapper;
   @Mock private StoreRepository storeRepository;
   @Mock private StoreMapper storeMapper;
   @Mock private DataFileMigrationRepository dataFileMigrationRepository;
@@ -36,7 +36,7 @@ class StoreInfoLoaderTest {
   @BeforeEach
   void setUp() {
     storeInfoLoader =
-        new StoreInfoLoader(storeMapper, storeRepository, dataFileMigrationRepository);
+        new StoreInfoLoader(objectMapper, storeMapper, storeRepository, dataFileMigrationRepository);
   }
 
 //  @Test
@@ -77,8 +77,8 @@ class StoreInfoLoaderTest {
         .location(new Point(null, null))
         .showWarningMessage(storeDto.isShowWarningMessage())
         .collectionPoint(storeDto.isCollectionPoint())
-        .todayClose(parseTime(storeDto.getTodayClose()))
-        .todayOpen(parseTime(storeDto.getTodayOpen()))
+        .todayClose(storeDto.getTodayClose())
+        .todayOpen(storeDto.getTodayOpen())
         .build();
   }
 

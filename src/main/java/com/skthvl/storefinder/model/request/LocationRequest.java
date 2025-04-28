@@ -31,5 +31,5 @@ public class LocationRequest {
   @NotNull(message = "Latitude is required")
   @DecimalMin(value = "-90.0", message = "Latitude must be >= -90")
   @DecimalMax(value = "90.0", message = "Latitude must be <= 90")
-    private Double latitude;
+  private Double latitude;
 }
