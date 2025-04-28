@@ -24,7 +24,8 @@ import lombok.ToString;
 @Builder
 public class StoreDto implements Serializable {
   /** Unique identifier for the store. */
-  private String uuid;
+  @JsonProperty("uuid")
+  private String storeId;
 
   /** SAP system store identifier. */
   @JsonProperty("sapStoreID")

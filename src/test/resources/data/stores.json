@@ -17,23 +17,6 @@
       "collectionPoint": true,
       "sapStoreID": "3605",
       "todayClose": "20:00"
-    },
-    {
-      "city": "'s-Heerenberg",
-      "postalCode": "7041 JE",
-      "street": "Stadsplein",
-      "street2": "71",
-      "street3": "",
-      "addressName": "Jumbo 's-Heerenberg Stadsplein",
-      "uuid": "7ewKYx4Xqp0AAAFIHigYwKrH",
-      "longitude": "6.245829",
-      "latitude": "51.874272",
-      "complexNumber": "30170",
-      "showWarningMessage": true,
-      "todayOpen": "08:00",
-      "locationType": "Supermarkt",
-      "sapStoreID": "4670",
-      "todayClose": "21:00"
     }
   ]
 }

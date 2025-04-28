@@ -56,7 +56,9 @@ public interface StoreRepository extends JpaRepository<Store, BigInteger> {
       @Param("latitude") final double latitude,
       final Pageable pageable);
 
-  void deleteByUuid(String uuid);
+  void deleteByStoreId(final String storeId);
 
-  Optional<Store> findByUuid(final String uuid);
+  Optional<Store> findByStoreId(final String storeId);
+
+  boolean existsByStoreId(final String storeId);
 }

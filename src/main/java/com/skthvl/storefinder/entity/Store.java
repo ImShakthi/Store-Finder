@@ -53,9 +53,9 @@ public class Store extends Auditable {
   @JoinColumn(name = "location_type_id")
   private StoreLocationType storeLocationType;
 
-  /** Unique UUID for the store. */
+  /** Unique id for the store. */
   @Column(nullable = false)
-  private String uuid;
+  private String storeId;
 
   /** SAP system store identifier. */
   @Column(nullable = false)
@@ -81,7 +81,7 @@ public class Store extends Auditable {
   @Column(name="today_open") private LocalTime todayOpen;
 
   /** Store closing time for current day. */
-  @Column private LocalTime todayClose;
+  @Column(name = "today_close") private LocalTime todayClose;
 
   /** Check if store is closed based on operating hours. */
   public boolean isStoreClosed() {

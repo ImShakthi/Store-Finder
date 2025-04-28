@@ -1,5 +1,6 @@
 package com.skthvl.storefinder.exception.handler;
 
+import com.skthvl.storefinder.exception.type.StoreNotFoundException;
 import com.skthvl.storefinder.model.response.ErrorResponse;
 import jakarta.validation.ConstraintViolationException;
 import java.util.HashMap;
@@ -20,15 +21,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class GlobalExceptionHandler {
 
   /**
-   * Handles {@link IllegalArgumentException} by returning a BAD_REQUEST response with the exception
-   * message.
+   * Handles {@link IllegalArgumentException} and {@link StoreNotFoundException} by returning a
+   * BAD_REQUEST response with the exception message.
    *
    * @param ex the IllegalArgumentException that was thrown
    * @return ResponseEntity containing the error message with HTTP status 400 (BAD_REQUEST)
    */
-  @ExceptionHandler(IllegalArgumentException.class)
+  @ExceptionHandler({IllegalArgumentException.class, StoreNotFoundException.class})
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public ErrorResponse handleIllegalArgument(final IllegalArgumentException ex) {
+  public ErrorResponse handleIllegalArgument(final Exception ex) {
     return new ErrorResponse(ex.getMessage());
   }
 

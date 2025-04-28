@@ -20,7 +20,7 @@ public interface StoreDtoMapper {
   @Mapping(target = "postalCode", source = "store.address.postalCode")
   StoreDto storeDto(final Store store);
 
-  @Mapping(target = "uuid", expression = "java(java.util.UUID.randomUUID().toString())")
+  @Mapping(target = "storeId", expression = "java(java.util.UUID.randomUUID().toString())")
   StoreDto storeDto(final CreateStoreRequest request);
 
   StoreResponse toStoreResponse(final StoreDto storeDto);

@@ -1,4 +1,4 @@
-package com.skthvl.storefinder.config;
+package com.skthvl.storefinder.config.jackson;
 
 import com.bedatadriven.jackson.datatype.jts.JtsModule;
 import com.fasterxml.jackson.databind.DeserializationFeature;

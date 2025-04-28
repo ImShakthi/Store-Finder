@@ -62,7 +62,7 @@ public class StoreController {
   @DeleteMapping("/{storeId}")
   public ResponseEntity<MessageResponse> deleteStore(
       @PathVariable("storeId") final String storeId) {
-
+    log.info("store with id {} is to be deleted", storeId);
     storeService.deleteStore(storeId);
 
     return ResponseEntity.ok().body(new MessageResponse("store details is modified."));

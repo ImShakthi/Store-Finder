@@ -16,7 +16,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class StoreResponse {
   /** Unique identifier for the store. */
-  private String uuid;
+  private String storeId;
 
   /** SAP system store identifier. */
   private String sapStoreId;

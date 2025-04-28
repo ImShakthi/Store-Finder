@@ -69,7 +69,7 @@ public class StoreInfoLoader {
               .map(storeMapper::toStore)
               .filter(Objects::nonNull)
               .toList();
-
+      log.info("loaded {} stores", stores.size());
       storeRepository.saveAll(stores);
 
       final var dataFileMigration =

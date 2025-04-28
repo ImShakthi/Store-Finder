@@ -56,13 +56,14 @@ public class StoreService {
 
   public StoreDto registerStore(final StoreDto storeDto) {
     final var store = storeRepository.save(storeMapper.toStore(storeDto));
-    log.info("store with id {} is registered", store.getUuid());
+    log.info("store with id {} is registered", store.getStoreId());
     return storeDtoMapper.storeDto(store);
   }
 
   @Transactional
   public StoreDto modifyStore(final StoreDto storeDto, final String storeId) {
-    final var store = storeRepository.findByUuid(storeId).orElseThrow(StoreNotFoundException::new);
+    final var store =
+        storeRepository.findByStoreId(storeId).orElseThrow(StoreNotFoundException::new);
 
     // TODO: add logic to modify store details
 
@@ -71,15 +72,11 @@ public class StoreService {
 
   @Transactional
   public void deleteStore(final String storeId) {
-//    storeRepository
-//        .findByUuid(storeId)
-//        .map(
-//            store -> {
-//              log.info("store {} to be deleted", store.getAddress());
-//              storeRepository.delete(store);
-//              log.info("store with id {} is deleted", storeId);
-//              return true;
-//            })
-//        .orElseThrow(StoreNotFoundException::new);
+    if (!storeRepository.existsByStoreId(storeId)) {
+      throw new StoreNotFoundException();
+    }
+
+    storeRepository.deleteByStoreId(storeId);
+    log.info("store with id {} is deleted", storeId);
   }
 }

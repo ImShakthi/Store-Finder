@@ -34,7 +34,6 @@ public class SafeLocalTimeDeserializer extends JsonDeserializer<LocalTime> {
     if (isNull(value) || value.isBlank() || value.equalsIgnoreCase("GESLOTEN")) {
       return null;
     }
-    log.info(">>>> value: {}", value);
     return LocalTime.parse(value, FORMATTER);
   }
 }

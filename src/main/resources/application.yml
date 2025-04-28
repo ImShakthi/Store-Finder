@@ -39,7 +39,7 @@ store-finder:
     dev-url: http://localhost:8080
     prod-url: http://localhost:8080
   jwt:
-#    secret: ENC(piKfYmhWClAPtJrkV+1KZ+y/d6Fs9UovXIXcjt+ZLlSEy0nEcIfhYWhdeXKxVWavfDQWxPVme3N9vbU7d6oNeHfHJyAE/GcYxqYlTHyHHXg=)
+    secret: e9e89c1617bcdb279ec7999677232ea9ee67f9da3666f818f3d6f5d0806c77c7
     expiration-in-milliseconds: 600000
   env:
     jasypt-encryptor-password: jasypt-itest

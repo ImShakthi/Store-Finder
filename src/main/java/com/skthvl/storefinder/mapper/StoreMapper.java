@@ -82,7 +82,7 @@ public class StoreMapper {
         .address(address)
         .city(city)
         .storeLocationType(locType)
-        .uuid(getUuid(storeDto))
+        .storeId(getStoreId(storeDto))
         .sapStoreId(storeDto.getSapStoreId())
         .complexNumber(storeDto.getComplexNumber())
         .location(getLocation(storeDto))
@@ -144,7 +144,7 @@ public class StoreMapper {
         new Coordinate(storeDto.getLongitude(), storeDto.getLatitude()));
   }
 
-  private String getUuid(final StoreDto storeDto) {
-    return isNull(storeDto.getUuid()) ? UUID.randomUUID().toString() : storeDto.getUuid();
+  private String getStoreId(final StoreDto storeDto) {
+    return isNull(storeDto.getStoreId()) ? UUID.randomUUID().toString() : storeDto.getStoreId();
   }
 }

@@ -72,7 +72,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="uuid" type="VARCHAR(255)">
+            <column name="store_id" type="VARCHAR(255)">
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="sap_store_id" type="VARCHAR(255)">
