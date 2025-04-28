@@ -44,4 +44,4 @@ store-finder:
   env:
     jasypt-encryptor-password: jasypt-itest
   security:
-    cors-allowed-origins: http://localhost:8080,http://localhost:3000,https://cinemetrics-api-d21f2e62e3ca.herokuapp.com
+    cors-allowed-origins: http://localhost:8080,http://localhost:3000

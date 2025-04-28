@@ -39,7 +39,9 @@ public interface StoreRepository extends JpaRepository<Store, BigInteger> {
             CROSS JOIN
                 params
             WHERE
-                s.location IS NOT NULL
+                s.location IS NOT NULL AND
+                (:radiusInMeter = 0  OR 
+                ROUND(ST_Distance(s.location, point))::INTEGER <= :radiusInMeter)
             ORDER BY
                 s.location <-> point
           """,
@@ -54,6 +56,7 @@ public interface StoreRepository extends JpaRepository<Store, BigInteger> {
   Page<StoreDistanceDto> findNearestStoresBy(
       @Param("longitude") final double longitude,
       @Param("latitude") final double latitude,
+      @Param("radiusInMeter") final double radiusInMeter,
       final Pageable pageable);
 
   void deleteByStoreId(final String storeId);

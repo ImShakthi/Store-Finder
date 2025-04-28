@@ -1,55 +1,48 @@
 package com.skthvl.storefinder.controller;
 
 import com.skthvl.storefinder.model.dto.StoreDistanceDto;
-import com.skthvl.storefinder.model.request.LocationRequest;
 import com.skthvl.storefinder.model.response.PaginatedResponse;
-import com.skthvl.storefinder.service.StoreService;
-import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
+import com.skthvl.storefinder.model.response.StoreOperationStatusResponse;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
-/**
- * REST controller for managing store-related operations. Provides endpoints for retrieving store
- * information based on geographical location.
- */
-@Slf4j
-@RestController
-@RequestMapping("/api/v1/stores")
-public class StoreInfoController {
-  private final StoreService storeService;
+public interface StoreInfoController {
 
   /**
-   * Constructs a new StoreController with the required StoreService.
+   * Retrieves a paginated list of stores nearest to a specific geographical location based on
+   * provided longitude, latitude, and an optional search radius.
    *
-   * @param storeService Service layer component for store operations
+   * @param longitude The longitude of the reference location. Must be between -180.0 and 180.0.
+   * @param latitude The latitude of the reference location. Must be between -90.0 and 90.0.
+   * @param radius Optional search radius around the reference location. Defaults to 0, indicating
+   *     no radius filter. Can be specified in meters (e.g., "500m") or kilometers (e.g., "2km").
+   * @param page The page index for pagination. Defaults to 0.
+   * @param size The number of records per page for pagination. Defaults to 5.
+   * @return A response entity containing a paginated response with a list of stores and their
+   *     respective distance from the reference location.
    */
-  public StoreInfoController(final StoreService storeService) {
-    this.storeService = storeService;
-  }
-
-  /**
-   * Retrieves a paginated list of stores sorted by distance from given coordinates.
-   *
-   * @param locationRequest Contains longitude and latitude coordinates
-   * @param page Zero-based page index (default: 0)
-   * @param size The size of the page to be returned (default: 5)
-   * @return Page of StoreDistanceDto containing nearest stores with their distances
-   */
-  @PostMapping("/nearest")
-  public ResponseEntity<PaginatedResponse<StoreDistanceDto>> getNearestStores(
-      @Valid @RequestBody final LocationRequest locationRequest,
+  @GetMapping(value = "/api/v1/stores/nearby", produces = MediaType.APPLICATION_JSON_VALUE)
+  ResponseEntity<PaginatedResponse<StoreDistanceDto>> getNearestStores(
+      @DecimalMin(value = "-180.0", message = "Longitude must be >= -180")
+          @DecimalMax(value = "180.0", message = "Longitude must be <= 180")
+          @RequestParam(name = "longitude")
+          final Double longitude,
+      @NotNull(message = "Latitude is required")
+          @DecimalMin(value = "-90.0", message = "Latitude must be >= -90")
+          @DecimalMax(value = "90.0", message = "Latitude must be <= 90")
+          @RequestParam(name = "latitude")
+          final Double latitude,
+      @RequestParam(name = "radius", defaultValue = "0") final String radius,
       @RequestParam(defaultValue = "0") final int page,
-      @RequestParam(defaultValue = "5") final int size) {
+      @RequestParam(defaultValue = "5") final int size);
 
-    final var storeDistanceDto =
-        storeService.findNearestStores(
-            locationRequest.getLongitude(), locationRequest.getLatitude(), page, size);
-
-    return ResponseEntity.ok().body(new PaginatedResponse<>(storeDistanceDto));
-  }
+  @GetMapping("/api/v1/stores/{storeId}/operation-status")
+  ResponseEntity<StoreOperationStatusResponse> getStoreOperationStatus(
+      @PathVariable(name = "storeId") final String storeId);
 }

@@ -95,4 +95,9 @@ public class Store extends Auditable {
   public double getLatitude() {
     return location.getCoordinate().y;
   }
+
+  public boolean isStoreOpen() {
+    final var now = LocalTime.now();
+    return now.isAfter(todayOpen) && now.isBefore(todayClose);
+  }
 }

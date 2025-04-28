@@ -1,5 +1,6 @@
 package com.skthvl.storefinder.exception.handler;
 
+import com.skthvl.storefinder.exception.type.InvalidInputException;
 import com.skthvl.storefinder.exception.type.StoreNotFoundException;
 import com.skthvl.storefinder.model.response.ErrorResponse;
 import jakarta.validation.ConstraintViolationException;
@@ -15,19 +16,25 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
   /**
-   * Handles {@link IllegalArgumentException} and {@link StoreNotFoundException} by returning a
-   * BAD_REQUEST response with the exception message.
+   * Handles {@link IllegalArgumentException}, {@link StoreNotFoundException}, and {@link
+   * InvalidInputException} by returning a BAD_REQUEST response with the exception message.
    *
    * @param ex the IllegalArgumentException that was thrown
    * @return ResponseEntity containing the error message with HTTP status 400 (BAD_REQUEST)
    */
-  @ExceptionHandler({IllegalArgumentException.class, StoreNotFoundException.class})
+  @ExceptionHandler({
+    IllegalArgumentException.class,
+    StoreNotFoundException.class,
+    InvalidInputException.class
+  })
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ErrorResponse handleIllegalArgument(final Exception ex) {
     return new ErrorResponse(ex.getMessage());

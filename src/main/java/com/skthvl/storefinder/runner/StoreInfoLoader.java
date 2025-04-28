@@ -70,6 +70,7 @@ public class StoreInfoLoader {
               .filter(Objects::nonNull)
               .toList();
       log.info("loaded {} stores", stores.size());
+
       storeRepository.saveAll(stores);
 
       final var dataFileMigration =
@@ -104,7 +105,6 @@ public class StoreInfoLoader {
           requireNonNull(getClass().getClassLoader().getResource(fileName), "file not found");
 
       final var storesDto = objectMapper.readValue(resource, StoresDto.class);
-
       requireNonNull(storesDto, "storesDto cannot be null");
 
       return storesDto.getStores();

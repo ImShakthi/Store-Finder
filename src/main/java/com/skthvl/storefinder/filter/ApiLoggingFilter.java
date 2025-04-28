@@ -49,7 +49,6 @@ public class ApiLoggingFilter extends OncePerRequestFilter {
       chain.doFilter(request, response);
 
       if (!skipLogging(req)) {
-        log.info("Request: {} {}", request.getMethod(), request.getRequestURI());
         Optional.of(new String(request.getContentAsByteArray(), request.getCharacterEncoding()))
             .filter(s -> !s.isEmpty())
             .ifPresent(log::info);

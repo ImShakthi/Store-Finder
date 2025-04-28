@@ -5,6 +5,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,8 +29,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig {
 
-  //  @Value("#{'${cinemetrics.security.cors-allowed-origins}'.split(',')}")
-  //  private List<String> corsAllowedUrls;
+    @Value("#{'${store-finder.security.cors-allowed-origins}'.split(',')}")
+    private List<String> corsAllowedUrls;
 
   private static final String[] PUBLIC_NON_APP_APIs =
       new String[] {
@@ -45,11 +46,10 @@ public class SecurityConfig {
       };
 
   private static final String[] PUBLIC_NO_AUTH_APP_APIs =
-      new String[] {"/api/v1/stores/nearest", "/api/v1/stores", "/api/v1/stores/{storeId}"};
+      new String[] {"/api/v1/stores/nearby", "/api/v1/stores", "/api/v1/stores/{storeId}"};
 
   private static final String[] AUTH_APP_APIs = new String[] {};
 
-  private static final String[] ADMIN_AUTH_APP_APIs = new String[] {};
 
   //  private final JwtAuthenticationFilter jwtFilter;
   //
@@ -74,22 +74,19 @@ public class SecurityConfig {
             auth ->
                 auth
                     // public apis (without JWT)
-                    .requestMatchers(PUBLIC_NON_APP_APIs)
-                    .permitAll()
-                    .requestMatchers(PUBLIC_NO_AUTH_APP_APIs)
-                    .permitAll()
+//                    .requestMatchers(PUBLIC_NON_APP_APIs)
+//                    .permitAll()
+//
+//                    .requestMatchers(PUBLIC_NO_AUTH_APP_APIs)
+//                    .permitAll()
 
                     // auth apis (with JWT)
-                    .requestMatchers(AUTH_APP_APIs)
-                    .authenticated()
-
-                    // admin apis (with JWT)
-                    .requestMatchers(ADMIN_AUTH_APP_APIs)
-                    .authenticated()
+//                    .requestMatchers(AUTH_APP_APIs)
+//                    .authenticated()
 
                     // Other APIs
                     .anyRequest()
-                    .authenticated())
+                    .permitAll())
 
         // Stateless session (required for JWT)
         .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
@@ -138,8 +135,8 @@ public class SecurityConfig {
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     final CorsConfiguration config = new CorsConfiguration();
-    //    config.setAllowedOrigins(corsAllowedUrls);
-    config.setAllowedOrigins(List.of("http://localhost:3000/"));
+        config.setAllowedOrigins(corsAllowedUrls);
+//    config.setAllowedOrigins(List.of("http://localhost:3000/"));
     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     config.setAllowedHeaders(List.of("*"));
     config.setAllowCredentials(true); // required if using cookies or Authorization headers
