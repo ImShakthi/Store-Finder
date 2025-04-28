@@ -39,6 +39,12 @@ public class StoreController {
     this.storeDtoMapper = storeDtoMapper;
   }
 
+  /**
+   * Creates a new store with the provided details.
+   *
+   * @param createStoreRequest The store details for creation
+   * @return ResponseEntity containing the created store details
+   */
   @PostMapping
   public ResponseEntity<StoreResponse> createStore(
       @Valid @RequestBody final CreateStoreRequest createStoreRequest) {
@@ -48,6 +54,13 @@ public class StoreController {
     return ResponseEntity.status(HttpStatus.CREATED).body(storeDtoMapper.toStoreResponse(storeDto));
   }
 
+  /**
+   * Updates an existing store with the provided details.
+   *
+   * @param createStoreRequest The updated store details
+   * @param storeId The ID of the store to modify
+   * @return ResponseEntity containing the modified store details
+   */
   @PutMapping("/{storeId}")
   public ResponseEntity<StoreResponse> modifyStore(
       @Valid @RequestBody final CreateStoreRequest createStoreRequest,
@@ -59,6 +72,12 @@ public class StoreController {
     return ResponseEntity.ok().body(storeDtoMapper.toStoreResponse(storeDto));
   }
 
+  /**
+   * Deletes a store with the specified ID.
+   *
+   * @param storeId The ID of the store to delete
+   * @return ResponseEntity containing confirmation message
+   */
   @DeleteMapping("/{storeId}")
   public ResponseEntity<MessageResponse> deleteStore(
       @PathVariable("storeId") final String storeId) {

@@ -18,6 +18,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * GlobalExceptionHandler centralizes exception handling for the application by providing specific
+ * responses to various exception types. It ensures that client-facing behaviors are standardized
+ * and that appropriate HTTP status codes and error messages are returned.
+ *
+ * <p>This class leverages Spring's exception-handling mechanism to catch, process, and respond to
+ * exceptions thrown during request processing. It includes methods to handle specific exception
+ * types as well as a fallback for generic exceptions.
+ */
 @Slf4j
 @ControllerAdvice
 @RestControllerAdvice

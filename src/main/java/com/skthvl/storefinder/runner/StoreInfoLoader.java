@@ -34,7 +34,8 @@ public class StoreInfoLoader {
    * processing store information and managing data migration.
    *
    * @param objectMapper Utility for JSON serialization and deserialization tasks
-   * @param storeMapper Mapper for converting StoreDto objects to Store entities and managing related dependencies
+   * @param storeMapper Mapper for converting StoreDto objects to Store entities and managing
+   *     related dependencies
    * @param storeRepository Repository for managing Store entities and operations
    * @param dataFileMigrationRepository Repository for tracking and verifying data file migrations
    */

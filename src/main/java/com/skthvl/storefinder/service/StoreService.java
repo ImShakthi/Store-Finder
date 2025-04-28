@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service class for managing store-related operations and queries. Provides functionality for
- * finding nearest stores based on geographical coordinates.
+ * Service class for managing store operations including registration, modification, and deletion.
+ * Handles CRUD operations and business logic for store management.
  */
 @Slf4j
 @Service
@@ -36,12 +36,26 @@ public class StoreService {
     this.storeDtoMapper = storeDtoMapper;
   }
 
+  /**
+   * Registers a new store in the system.
+   *
+   * @param storeDto Store information to be registered
+   * @return StoreDto containing the registered store details
+   */
   public StoreDto registerStore(final StoreDto storeDto) {
     final var store = storeRepository.save(storeMapper.toStore(storeDto));
     log.info("store with id {} is registered", store.getStoreId());
     return storeDtoMapper.storeDto(store);
   }
 
+  /**
+   * Modifies an existing store's information.
+   *
+   * @param storeDto Updated store information
+   * @param storeId Identifier of the store to be modified
+   * @return StoreDto containing the modified store details
+   * @throws StoreNotFoundException if store with given ID is not found
+   */
   @Transactional
   public StoreDto modifyStore(final StoreDto storeDto, final String storeId) {
     final var store =
@@ -52,6 +66,12 @@ public class StoreService {
     return storeDtoMapper.storeDto(store);
   }
 
+  /**
+   * Deletes a store from the system.
+   *
+   * @param storeId Identifier of the store to be deleted
+   * @throws StoreNotFoundException if store with given ID is not found
+   */
   @Transactional
   public void deleteStore(final String storeId) {
     if (!storeRepository.existsByStoreId(storeId)) {

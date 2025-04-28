@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * Controller interface for managing store information and operations. Provides endpoints for
+ * retrieving store locations and operational status.
+ */
 public interface StoreInfoController {
 
   /**
@@ -42,6 +46,12 @@ public interface StoreInfoController {
       @RequestParam(defaultValue = "0") final int page,
       @RequestParam(defaultValue = "5") final int size);
 
+  /**
+   * Retrieves the current operational status of a specific store.
+   *
+   * @param storeId Unique identifier of the store
+   * @return Response containing the store's operational status information
+   */
   @GetMapping("/api/v1/stores/{storeId}/operation-status")
   ResponseEntity<StoreOperationStatusResponse> getStoreOperationStatus(
       @PathVariable(name = "storeId") final String storeId);

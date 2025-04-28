@@ -7,10 +7,19 @@ import com.skthvl.storefinder.model.response.StoreResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+/**
+ * Mapper interface for converting between Store entities, DTOs, and related objects. Implements
+ * automatic mapping using MapStruct with Spring component model.
+ */
 @Mapper(componentModel = "spring")
 public interface StoreDtoMapper {
-  //    @Mapping(target = "longitude",source = "")
-  //    @Mapping(target = "latitude",source = "")
+  /**
+   * Maps Store entity to StoreDto, handling nested property mappings for location, city and
+   * address.
+   *
+   * @param store Source Store entity
+   * @return Mapped StoreDto
+   */
   @Mapping(target = "locationType", source = "store.storeLocationType.name")
   @Mapping(target = "city", source = "store.city.name")
   @Mapping(target = "street", source = "store.address.street")
@@ -20,8 +29,20 @@ public interface StoreDtoMapper {
   @Mapping(target = "postalCode", source = "store.address.postalCode")
   StoreDto storeDto(final Store store);
 
+  /**
+   * Creates new StoreDto from CreateStoreRequest, generating a random UUID as storeId.
+   *
+   * @param request Source CreateStoreRequest
+   * @return New StoreDto instance
+   */
   @Mapping(target = "storeId", expression = "java(java.util.UUID.randomUUID().toString())")
   StoreDto storeDto(final CreateStoreRequest request);
 
+  /**
+   * Converts StoreDto to StoreResponse.
+   *
+   * @param storeDto Source StoreDto
+   * @return Mapped StoreResponse
+   */
   StoreResponse toStoreResponse(final StoreDto storeDto);
 }

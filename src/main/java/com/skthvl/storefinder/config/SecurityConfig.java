@@ -29,8 +29,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Value("#{'${store-finder.security.cors-allowed-origins}'.split(',')}")
-    private List<String> corsAllowedUrls;
+  @Value("#{'${store-finder.security.cors-allowed-origins}'.split(',')}")
+  private List<String> corsAllowedUrls;
 
   private static final String[] PUBLIC_NON_APP_APIs =
       new String[] {
@@ -49,7 +49,6 @@ public class SecurityConfig {
       new String[] {"/api/v1/stores/nearby", "/api/v1/stores", "/api/v1/stores/{storeId}"};
 
   private static final String[] AUTH_APP_APIs = new String[] {};
-
 
   //  private final JwtAuthenticationFilter jwtFilter;
   //
@@ -74,15 +73,15 @@ public class SecurityConfig {
             auth ->
                 auth
                     // public apis (without JWT)
-//                    .requestMatchers(PUBLIC_NON_APP_APIs)
-//                    .permitAll()
-//
-//                    .requestMatchers(PUBLIC_NO_AUTH_APP_APIs)
-//                    .permitAll()
+                    //                    .requestMatchers(PUBLIC_NON_APP_APIs)
+                    //                    .permitAll()
+                    //
+                    //                    .requestMatchers(PUBLIC_NO_AUTH_APP_APIs)
+                    //                    .permitAll()
 
                     // auth apis (with JWT)
-//                    .requestMatchers(AUTH_APP_APIs)
-//                    .authenticated()
+                    //                    .requestMatchers(AUTH_APP_APIs)
+                    //                    .authenticated()
 
                     // Other APIs
                     .anyRequest()
@@ -135,8 +134,8 @@ public class SecurityConfig {
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     final CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(corsAllowedUrls);
-//    config.setAllowedOrigins(List.of("http://localhost:3000/"));
+    config.setAllowedOrigins(corsAllowedUrls);
+    //    config.setAllowedOrigins(List.of("http://localhost:3000/"));
     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     config.setAllowedHeaders(List.of("*"));
     config.setAllowCredentials(true); // required if using cookies or Authorization headers

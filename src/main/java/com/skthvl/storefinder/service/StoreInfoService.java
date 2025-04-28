@@ -10,11 +10,20 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Service class responsible for handling store-related operations including finding nearest stores
+ * and checking store operation status.
+ */
 @Service
 public class StoreInfoService {
   private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
   private final StoreRepository storeRepository;
 
+  /**
+   * Constructs a StoreInfoService with required repository dependency.
+   *
+   * @param storeRepository Repository for accessing store data
+   */
   public StoreInfoService(final StoreRepository storeRepository) {
     this.storeRepository = storeRepository;
   }
@@ -24,7 +33,7 @@ public class StoreInfoService {
    *
    * @param longitude Geographical longitude coordinate
    * @param latitude Geographical latitude coordinate
-   * @param radiusInMeter
+   * @param radiusInMeter Radius is meter
    * @param page Zero-based page index
    * @param size The size of the page to be returned
    * @return Page of StoreDistanceDto containing nearest stores with their distances
@@ -41,6 +50,13 @@ public class StoreInfoService {
         longitude, latitude, radiusInMeter, PageRequest.of(page, size));
   }
 
+  /**
+   * Retrieves the current operation status of a store.
+   *
+   * @param storeId Unique identifier of the store
+   * @return StoreOperationStatusDto containing store's operation status and timing details
+   * @throws StoreNotFoundException if store with given ID is not found
+   */
   @Transactional(readOnly = true)
   public StoreOperationStatusDto getOperationStatusBy(final String storeId) {
     final var store =

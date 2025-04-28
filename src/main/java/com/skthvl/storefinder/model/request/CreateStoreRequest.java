@@ -11,6 +11,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Request object for creating a new store with location and address details. Generated
+ * constructors: - Default no-args constructor - All-args constructor with all fields - Builder
+ * pattern available via @Builder annotation
+ */
 @Setter
 @Getter
 @ToString

@@ -11,8 +11,8 @@ import java.time.format.DateTimeFormatter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Custom JSON deserializer for LocalTime values that handles special cases like null, blank, or "GESLOTEN" values.
- * Uses "HH:mm" format for time parsing.
+ * Custom JSON deserializer for LocalTime values that handles special cases like null, blank, or
+ * "GESLOTEN" values. Uses "HH:mm" format for time parsing.
  */
 @Slf4j
 public class SafeLocalTimeDeserializer extends JsonDeserializer<LocalTime> {
