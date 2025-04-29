@@ -19,6 +19,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.locationtech.jts.geom.Point;
 import org.mockito.Mock;
@@ -44,9 +45,9 @@ class StoreInfoLoaderTest {
         new StoreInfoLoader(objectMapper, storeMapper, storeRepository, dataFileMigrationRepository);
   }
 
-//  @Test
+  @Test
   void loadDataIntoDatabase_ShouldLoadJsonDataIntoDatabase() {
-    final var inputFilePath = "data/stores.json";
+    final var inputFilePath = "data/testdata/stores.json";
     final var storesDto = getStoresFromJsonFile(inputFilePath);
     final var store = toStore(storesDto.getFirst());
     final var stores = List.of(store);
@@ -54,13 +55,10 @@ class StoreInfoLoaderTest {
     when(dataFileMigrationRepository.existsByFilePathAndFileChecksum(
             inputFilePath, "8304cd2c909a5ee6ab3604bc78283578"))
         .thenReturn(false);
-//    when(storeMapper.toStore(eq(storesDto.getFirst()))).thenReturn(eq(store));
     doReturn(store).when(storeMapper).toStore(storesDto.getFirst());
     when(storeRepository.saveAll(stores)).thenReturn(stores);
 
     storeInfoLoader.loadDataIntoDatabase(inputFilePath);
-
-    //    verify(storeRepository).saveAll(any());
   }
 
   private Store toStore(final StoreDto storeDto) {

@@ -1,0 +1,40 @@
+{
+  "stores": [
+    {
+      "city": "'s Gravendeel",
+      "postalCode": "3295 BD",
+      "street": "Kerkstraat",
+      "street2": "37",
+      "street3": "",
+      "addressName": "Jumbo 's Gravendeel Gravendeel Centrum",
+      "uuid": "EOgKYx4XFiQAAAFJa_YYZ4At",
+      "longitude": "4.615551",
+      "latitude": "51.778461",
+      "complexNumber": "33249",
+      "showWarningMessage": true,
+      "todayOpen": "08:00",
+      "locationType": "SupermarktPuP",
+      "collectionPoint": true,
+      "sapStoreID": "3605",
+      "todayClose": "20:00"
+    },
+    {
+      "city": "Aalsmeer",
+      "postalCode": "1431 HN",
+      "street": "Ophelialaan",
+      "street2": "124",
+      "street3": "",
+      "addressName": "Jumbo Aalsmeer Ophelialaan",
+      "uuid": "gssKYx4XJwoAAAFbn.BMqPTb",
+      "longitude": "4.762433",
+      "latitude": "52.264417",
+      "complexNumber": "33010",
+      "showWarningMessage": true,
+      "todayOpen": "08:00",
+      "locationType": "SupermarktPuP",
+      "collectionPoint": true,
+      "sapStoreID": "3178",
+      "todayClose": "22:00"
+    }
+  ]
+}

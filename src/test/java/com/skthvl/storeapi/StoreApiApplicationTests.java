@@ -67,6 +67,7 @@ class StoreApiApplicationTests {
     registry.add("spring.datasource.url", POSTGIS::getJdbcUrl);
     registry.add("spring.datasource.username", POSTGIS::getUsername);
     registry.add("spring.datasource.password", POSTGIS::getPassword);
+
     registry.add("spring.data.redis.host", REDIS::getHost);
     registry.add("spring.data.redis.port", REDIS.getMappedPort(6379)::toString);
   }
