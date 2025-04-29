@@ -72,7 +72,7 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/v1/stores/nearby/**")
                     .permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/v1/stores/")
+                    .requestMatchers(HttpMethod.GET, "/api/v1/stores")
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/v1/stores/{storeId}/operation-status")
                     .permitAll()

@@ -1,0 +1,515 @@
+{
+	"info": {
+		"_postman_id": "b6aee071-1dde-4bab-9b0c-b8a44a512393",
+		"name": "stores-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24779732"
+	},
+	"item": [
+		{
+			"name": "cities",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{store-api}}/api/v1/cities",
+					"host": [
+						"{{store-api}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"cities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "store location types",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{store-api}}/api/v1/store-location-types",
+					"host": [
+						"{{store-api}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"store-location-types"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find nearby store",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{store-api}}/api/v1/stores/nearby?longitude={{longitude}}&latitude={{latitude}}&size=5",
+					"host": [
+						"{{store-api}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"stores",
+						"nearby"
+					],
+					"query": [
+						{
+							"key": "longitude",
+							"value": "{{longitude}}"
+						},
+						{
+							"key": "latitude",
+							"value": "{{latitude}}"
+						},
+						{
+							"key": "size",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find nearby store - radius",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{store-api}}/api/v1/stores/nearby?longitude={{longitude}}&latitude={{latitude}}&radius=8800m&size=100",
+					"host": [
+						"{{store-api}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"stores",
+						"nearby"
+					],
+					"query": [
+						{
+							"key": "longitude",
+							"value": "{{longitude}}"
+						},
+						{
+							"key": "latitude",
+							"value": "{{latitude}}"
+						},
+						{
+							"key": "radius",
+							"value": "8800m"
+						},
+						{
+							"key": "size",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get stores",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{store-api}}/api/v1/stores?city=Amsterdam&collectionPoint=true&storeLocationType=SupermarktPuP&page=0&size=2",
+					"host": [
+						"{{store-api}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"stores"
+					],
+					"query": [
+						{
+							"key": "city",
+							"value": "Amsterdam"
+						},
+						{
+							"key": "collectionPoint",
+							"value": "true"
+						},
+						{
+							"key": "storeLocationType",
+							"value": "SupermarktPuP"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "2"
+						},
+						{
+							"key": "openNow",
+							"value": "false",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "store operation status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{store-api}}/api/v1/stores/{{storeId}}/operation-status",
+					"host": [
+						"{{store-api}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"stores",
+						"{{storeId}}",
+						"operation-status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user - login admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();",
+							"const token = response.token || response.access_token || response.jwt; ",
+							"",
+							"if (token) {",
+							"  // Set token as a collection variable",
+							"  pm.collectionVariables.set(\"admin-access-token\", token);",
+							"  console.log(\"🔐 Token saved to collection variable: authToken\");",
+							"} "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"{{admin}}\",\n  \"password\": \"{{admin-password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{store-api}}/api/v1/auth/login",
+					"host": [
+						"{{store-api}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create store",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();",
+							"const storeId = response.storeId",
+							"",
+							"if (storeId) {",
+							"  // Set token as a collection variable",
+							"  pm.collectionVariables.set(\"storeId\", storeId);",
+							"} "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin-access-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\n      \"city\": \"Amsterdam\",\n      \"postalCode\": \"7041 JE\",\n      \"street\": \"Stadsplein\",\n      \"street2\": \"71\",\n      \"street3\": \"\",\n      \"addressName\": \"Jumbo Amsterdam test\",\n      \"longitude\": \"6.245829\",\n      \"latitude\": \"51.874272\",\n      \"complexNumber\": \"30171\",\n      \"showWarningMessage\": true,\n      \"todayOpen\": \"08:00\",\n      \"locationType\": \"Supermarkt\",\n      \"sapStoreId\": \"467681\",\n      \"todayClose\": \"21:00\"\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{store-api}}/api/v1/stores",
+					"host": [
+						"{{store-api}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"stores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "modify store",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();",
+							"const storeId = response.storeId",
+							"",
+							"if (storeId) {",
+							"  // Set token as a collection variable",
+							"  pm.collectionVariables.set(\"storeId\", storeId);",
+							"} "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin-access-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\n      \"city\": \"Amsterdam\",\n      \"postalCode\": \"7041 JE\",\n      \"street\": \"Stadsplein\",\n      \"street2\": \"71\",\n      \"street3\": \"\",\n      \"addressName\": \"Jumbo Amsterdam test\",\n      \"longitude\": \"6.245829\",\n      \"latitude\": \"51.874272\",\n      \"complexNumber\": \"30171\",\n      \"showWarningMessage\": true,\n      \"todayOpen\": \"08:00\",\n      \"locationType\": \"Supermarkt\",\n      \"sapStoreId\": \"467681\",\n      \"todayClose\": \"21:00\"\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{store-api}}/api/v1/stores/{{storeId}}",
+					"host": [
+						"{{store-api}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"stores",
+						"{{storeId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete store",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin-access-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{store-api}}/api/v1/stores/{{storeId}}",
+					"host": [
+						"{{store-api}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"stores",
+						"{{storeId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user - logout admin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin-access-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"{{admin}}\",\n  \"password\": \"{{admin-password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{store-api}}/api/v1/auth/logout",
+					"host": [
+						"{{store-api}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "store-api",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "storeId",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "longitude",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "latitude",
+			"value": "51.77846",
+			"type": "default"
+		},
+		{
+			"key": "admin",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "admin-password",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "admin-access-token",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
