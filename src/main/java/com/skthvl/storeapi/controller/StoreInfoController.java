@@ -3,6 +3,7 @@ package com.skthvl.storeapi.controller;
 import com.skthvl.storeapi.model.dto.StoreDistanceDto;
 import com.skthvl.storeapi.model.response.PaginatedResponse;
 import com.skthvl.storeapi.model.response.StoreOperationStatusResponse;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
@@ -42,7 +43,9 @@ public interface StoreInfoController {
           @DecimalMax(value = "90.0", message = "Latitude must be <= 90")
           @RequestParam(name = "latitude")
           final Double latitude,
-      @RequestParam(name = "radius", defaultValue = "0") final String radius,
+      @Parameter(name = "radius", example = "800m or 10km")
+          @RequestParam(name = "radius", defaultValue = "0")
+          final String radius,
       @RequestParam(defaultValue = "0") final int page,
       @RequestParam(defaultValue = "5") final int size);
 

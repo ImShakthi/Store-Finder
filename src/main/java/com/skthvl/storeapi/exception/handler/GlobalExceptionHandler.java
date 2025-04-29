@@ -13,7 +13,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * types as well as a fallback for generic exceptions.
  */
 @Slf4j
-@ControllerAdvice
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -47,6 +46,21 @@ public class GlobalExceptionHandler {
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ErrorResponse handleIllegalArgument(final Exception ex) {
     return new ErrorResponse(ex.getMessage());
+  }
+
+  /**
+   * Handles {@code MissingServletRequestParameterException} by returning a BAD_REQUEST response
+   * with a message indicating the missing parameter.
+   *
+   * @param ex the MissingServletRequestParameterException containing details about the missing parameter
+   * @return a map containing an error message with the key "error"
+   */
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public Map<String, String> handleMissingParams(final MissingServletRequestParameterException ex) {
+    final String message =
+        String.format("Required request parameter '%s' is missing.", ex.getParameterName());
+    return Map.of("error", message);
   }
 
   /**

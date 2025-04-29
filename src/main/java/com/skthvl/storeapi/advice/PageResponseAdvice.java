@@ -5,14 +5,14 @@ import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 /**
- * Controller advice that intercepts Spring Data Page responses and transforms them into
+ * REST Controller advice that intercepts Spring Data Page responses and transforms them into
  * PaginatedResponse format for consistent API responses.
  */
-@ControllerAdvice
+@RestControllerAdvice
 public class PageResponseAdvice implements ResponseBodyAdvice<Object> {
 
   /**
