@@ -5,7 +5,7 @@ public class StoreNotFoundException extends RuntimeException {
 
   /** Constructs an InvalidTimeFormatException with the default message. */
   public StoreNotFoundException() {
-    super("Invalid time format.");
+    super("store not found");
   }
 
   /**

@@ -4,6 +4,7 @@ import com.skthvl.storefinder.entity.Store;
 import com.skthvl.storefinder.model.dto.StoreDto;
 import com.skthvl.storefinder.model.request.CreateStoreRequest;
 import com.skthvl.storefinder.model.response.StoreResponse;
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -45,4 +46,6 @@ public interface StoreDtoMapper {
    * @return Mapped StoreResponse
    */
   StoreResponse toStoreResponse(final StoreDto storeDto);
+
+  List<StoreResponse> toStoreResponse(final List<StoreDto> storeDtoList);
 }

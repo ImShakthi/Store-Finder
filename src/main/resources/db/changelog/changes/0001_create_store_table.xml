@@ -6,6 +6,10 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
 
     <changeSet id="0001_create_store_table" author="sakthivel balasubramaniam">
+        <sql>
+            CREATE EXTENSION IF NOT EXISTS postgis CASCADE;
+        </sql>
+
         <createTable tableName="store_location_type">
             <column name="id" type="BIGSERIAL" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>

@@ -1,10 +1,17 @@
 package com.skthvl.storefinder.service;
 
+import static com.skthvl.storefinder.util.PageUtils.mapPage;
+
+import com.skthvl.storefinder.entity.Store;
 import com.skthvl.storefinder.exception.type.StoreNotFoundException;
+import com.skthvl.storefinder.mapper.StoreDtoMapper;
 import com.skthvl.storefinder.model.dto.StoreDistanceDto;
+import com.skthvl.storefinder.model.dto.StoreDto;
+import com.skthvl.storefinder.model.dto.StoreFilterCriteria;
 import com.skthvl.storefinder.model.dto.StoreOperationStatusDto;
 import com.skthvl.storefinder.repository.StoreRepository;
 import java.time.format.DateTimeFormatter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -14,18 +21,22 @@ import org.springframework.transaction.annotation.Transactional;
  * Service class responsible for handling store-related operations including finding nearest stores
  * and checking store operation status.
  */
+@Slf4j
 @Service
 public class StoreInfoService {
   private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
   private final StoreRepository storeRepository;
+  private final StoreDtoMapper storeDtoMapper;
 
   /**
    * Constructs a StoreInfoService with required repository dependency.
    *
    * @param storeRepository Repository for accessing store data
    */
-  public StoreInfoService(final StoreRepository storeRepository) {
+  public StoreInfoService(
+      final StoreRepository storeRepository, final StoreDtoMapper storeDtoMapper) {
     this.storeRepository = storeRepository;
+    this.storeDtoMapper = storeDtoMapper;
   }
 
   /**
@@ -70,5 +81,19 @@ public class StoreInfoService {
         .openingTime(store.getTodayOpen().format(timeFormatter))
         .closingTime(store.getTodayClose().format(timeFormatter))
         .build();
+  }
+
+  @Transactional(readOnly = true)
+  public Page<StoreDto> getStoreInfoBy(final StoreFilterCriteria criteria) {
+
+    log.info("criteria: {}", criteria);
+
+    final Page<Store> storePage = storeRepository.findStoreInfoBy(
+            criteria.city(),
+            criteria.openNow(),
+            criteria.collectionPoint(),
+            criteria.storeLocationType(),
+            PageRequest.of(criteria.page(), criteria.size()));
+    return mapPage(storePage, storeDtoMapper::storeDto);
   }
 }

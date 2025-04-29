@@ -40,7 +40,7 @@ public interface StoreRepository extends JpaRepository<Store, BigInteger> {
                 params
             WHERE
                 s.location IS NOT NULL AND
-                (:radiusInMeter = 0  OR 
+                (:radiusInMeter = 0  OR
                 ROUND(ST_Distance(s.location, point))::INTEGER <= :radiusInMeter)
             ORDER BY
                 s.location <-> point
@@ -57,6 +57,39 @@ public interface StoreRepository extends JpaRepository<Store, BigInteger> {
       @Param("longitude") final double longitude,
       @Param("latitude") final double latitude,
       @Param("radiusInMeter") final double radiusInMeter,
+      final Pageable pageable);
+
+  @Query(
+      value =
+          """
+        SELECT s
+        FROM Store s
+        JOIN s.address addr
+        JOIN s.city c
+        JOIN s.storeLocationType loc
+        WHERE (:cityNameParam IS NULL OR c.name = :cityNameParam)
+          AND (:openNowParam IS NULL OR (s.todayOpen <= CURRENT_TIME AND CURRENT_TIME <= s.todayClose))
+          AND (:collectionPointParam IS NULL OR s.collectionPoint = :collectionPointParam)
+          AND (:storeLocationTypeParam IS NULL OR loc.name = :storeLocationTypeParam)
+        ORDER BY s.storeId ASC
+        """,
+      countQuery =
+          """
+        SELECT COUNT(s)
+        FROM Store s
+        JOIN s.address addr
+        JOIN s.city c
+        JOIN s.storeLocationType loc
+        WHERE (:cityNameParam IS NULL OR c.name = :cityNameParam)
+          AND (:openNowParam IS NULL OR (s.todayOpen <= CURRENT_TIME AND CURRENT_TIME <= s.todayClose))
+          AND (:collectionPointParam IS NULL OR s.collectionPoint = :collectionPointParam)
+          AND (:storeLocationTypeParam IS NULL OR loc.name = :storeLocationTypeParam)
+        """)
+  Page<Store> findStoreInfoBy(
+      @Param("cityNameParam") String city,
+      @Param("openNowParam") Boolean openNow,
+      @Param("collectionPointParam") Boolean collectionPoint,
+      @Param("storeLocationTypeParam") String storeLocationType,
       final Pageable pageable);
 
   void deleteByStoreId(final String storeId);
