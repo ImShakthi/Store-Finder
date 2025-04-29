@@ -20,9 +20,10 @@ supports geospatial queries to identify stores near a specific coordinate within
     - Store location types
     - Address information
 - Developer tooling:
-    - Interactive API documentation via *
-      *[Swagger UI](https://jumbo-store-api-f1ae1b3de689.herokuapp.com/swagger-ui/index.html)**
+    - Interactive API documentation via 
+      **[Swagger UI](https://jumbo-store-api-f1ae1b3de689.herokuapp.com/swagger-ui/index.html)**
     - **Liquibase** for database version control and migration
+    - Setup is deployed in Heroku
 
 ## Techstack used👾
 
