@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.util.Arrays;
 
 /**
- * Utility class for handling date and time operations in the Store Finder application. Provides
+ * Utility class for handling date and time operations in the Store Api application. Provides
  * methods for parsing and converting time formats.
  */
 public class DateUtil {

@@ -13,7 +13,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * Data Transfer Object representing store information for the Store Finder application. Contains
+ * Data Transfer Object representing store information for the Store Api application. Contains
  * store location, identification, and operational details.
  */
 @Setter

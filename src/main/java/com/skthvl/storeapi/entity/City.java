@@ -14,7 +14,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * Entity representing a city in the store finder system.
+ * Entity representing a city in the store api system.
  * This class maps to the 'city' table in the database and stores basic city information.
  */
 @Setter

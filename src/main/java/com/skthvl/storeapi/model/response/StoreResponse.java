@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-/** Response object for store information in the Store Finder application. */
+/** Response object for store information in the Store Api application. */
 @Setter
 @Getter
 @ToString
