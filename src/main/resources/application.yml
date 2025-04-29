@@ -52,4 +52,4 @@ store-api:
   env:
     jasypt-encryptor-password: ${JASYPT_ENCRYPTOR_PASSWORD}
   security:
-    cors-allowed-origins: http://localhost:8080,http://localhost:3000
+    cors-allowed-origins: http://localhost:8080,http://localhost:3000,https://jumbo-store-api-f1ae1b3de689.herokuapp.com,http://jumbo-store-api-f1ae1b3de689.herokuapp.com
