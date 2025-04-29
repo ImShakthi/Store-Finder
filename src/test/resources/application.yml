@@ -47,9 +47,9 @@ store-api:
     dev-url: http://localhost:8080
     prod-url: http://localhost:8080
   jwt:
-    secret: ENC(4nTDQ+2B0xRBQJ94Dac5XOG3JQlV+OsPlmreixBQSvTecWcTAcOJGcoJg8SIU4IL81qNknHxTTAHvfgyeZjF0TR8GdwDUboBtKM8kxDPDzk=)
+    secret: ENC(qVb3fQuZhYR+49zsVJNemM968Xri1xi+AvsQZFafjer1uEQyxNV3eNrIJQsCm8HwGaEgRt/o/JILrhJ75p2LdgpK/S79ZEk1njqYlA1BKcE=)
     expiration-in-milliseconds: 600000
   env:
-    jasypt-encryptor-password: ${JASYPT_ENCRYPTOR_PASSWORD}
+    jasypt-encryptor-password: jasypt-itest
   security:
     cors-allowed-origins: http://localhost:8080,http://localhost:3000
