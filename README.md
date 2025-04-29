@@ -110,7 +110,7 @@ cd Store-Finder
 3. Build and start the server with Docker Compose, export all environment variables
 
 ```bash
-docker-compose up --build
+docker-compose --env-file=.env up --build
 ```
 
 4. Access Swagger UI to explore available APIs:
@@ -166,7 +166,8 @@ To run the app locally, build the project and start the services using Docker Co
 
 ```bash
 ./mvnw clean package
-docker-compose up --build
+
+docker-compose --env-file=.env up --build
 ```
 
 ## 📬 Test the API
