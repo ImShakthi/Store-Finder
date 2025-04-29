@@ -6,5 +6,6 @@
 
     <include file="changes/0001_create_store_table.xml" relativeToChangelogFile="true"/>
     <include file="changes/0002_create_data_file_migration_table.xml" relativeToChangelogFile="true"/>
+    <include file="changes/0003_create_user_account_table.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

@@ -8,7 +8,6 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
@@ -60,17 +59,14 @@ public class JwtTokenProvider {
    *
    * @param subject the subject for which the token is being generated, typically a username
    * @param currentDate the current date used as the token's issue date
-   * @param roles the roles to be included in the token, provided as a list of strings
    * @return a signed JWT as a String, containing the subject, roles, issue date, and a unique
    *     identifier
    */
-  public String generateToken(
-      final String subject, final Date currentDate, final List<String> roles) {
+  public String generateToken(final String subject, final Date currentDate) {
     final Date expireDate = new Date(currentDate.getTime() + jwtExpirationInMilliseconds);
 
     return Jwts.builder()
         .subject(subject)
-        .claim("roles", roles)
         .issuedAt(currentDate)
         .expiration(expireDate)
         .id(UUID.randomUUID().toString())
@@ -79,40 +75,15 @@ public class JwtTokenProvider {
   }
 
   /**
-   * Generates a JSON Web Token (JWT) for the specified subject (e.g., username). The token is
-   * created with the current timestamp, a default expiration period, and a default role
-   * ("ROLE_USER").
-   *
-   * @param subject the subject for which the token is being generated, typically a username
-   * @return a signed JWT as a String
-   */
-  public String generateToken(final String subject) {
-    return generateToken(subject, new Date(System.currentTimeMillis()), List.of("ROLE_USER"));
-  }
-
-  /**
-   * Generates a JSON Web Token (JWT) for the specified subject (e.g., username), with the provided
-   * current date and a default role ("ROLE_USER").
-   *
-   * @param subject the subject for which the token is being generated, typically a username
-   * @param currentDate the current date to use as the issue date of the token
-   * @return a signed JWT as a String
-   */
-  public String generateToken(final String subject, final Date currentDate) {
-    return generateToken(subject, currentDate, List.of("ROLE_USER"));
-  }
-
-  /**
    * Generates a JSON Web Token (JWT) containing the specified subject and roles. The token is
    * created with the current timestamp and an expiration period defined in the containing class's
    * configuration.
    *
    * @param subject the subject for which the token is being generated, typically a username
-   * @param roles the roles to be included in the token, provided as a list of strings
    * @return a signed JWT as a String containing the subject and roles
    */
-  public String generateTokenWithRoles(final String subject, final List<String> roles) {
-    return generateToken(subject, new Date(System.currentTimeMillis()), roles);
+  public String generateTokenWithRoles(final String subject) {
+    return generateToken(subject, new Date(System.currentTimeMillis()));
   }
 
   /**

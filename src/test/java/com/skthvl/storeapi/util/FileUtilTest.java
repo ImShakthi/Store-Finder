@@ -17,7 +17,7 @@ class FileUtilTest {
 
     // Then
     assertEquals(
-        "69694cb4511f27e27ea18a80b2c5930b6d80912b63bf1fc3cc5de07465e48010", actualChecksum);
+        "3d90c7a059c9a9ab266f578f806a04c8443f8e1e8b9c248c2465d0e1193b3024", actualChecksum);
   }
 
   @Test
