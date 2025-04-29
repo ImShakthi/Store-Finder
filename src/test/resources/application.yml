@@ -42,8 +42,8 @@ store-api:
     json:
       stores-info: db/data/stores.json
   openapi:
+    prod-url: https://jumbo-store-api-f1ae1b3de689.herokuapp.com
     dev-url: http://localhost:8080
-    prod-url: http://localhost:8080
   jwt:
     secret: ENC(qVb3fQuZhYR+49zsVJNemM968Xri1xi+AvsQZFafjer1uEQyxNV3eNrIJQsCm8HwGaEgRt/o/JILrhJ75p2LdgpK/S79ZEk1njqYlA1BKcE=)
     expiration-in-milliseconds: 600000
