@@ -27,6 +27,9 @@ supports geospatial queries to identify stores near a specific coordinate within
     deployment
   - **[GitHub Actions](https://github.com/ImShakthi/Store-Finder/actions)** – Automated CI/CD
     pipeline
+  - Postman collection
+    `[stores-api.postman_collection.json](https://github.com/ImShakthi/Store-Finder/blob/main/stores-api.postman_collection.json)`
+  - Google checkstyle incorporated - `./mvnw clean checkstyle:checkstyle`
 
 ## Techstack used👾
 
@@ -47,6 +50,7 @@ supports geospatial queries to identify stores near a specific coordinate within
 - Heroku
 - swagger
 - postman
+- google checkstyle
 
 ## 🚀 How to Run the Project
 
