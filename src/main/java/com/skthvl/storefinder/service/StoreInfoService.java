@@ -83,10 +83,15 @@ public class StoreInfoService {
         .build();
   }
 
+  /**
+   * Retrieves store information based on the specified filtering criteria.
+   *
+   * @param criteria the filter criteria containing city, open status, collection point information,
+   *     store location type, and paging parameters
+   * @return a page of StoreDto containing the store information matching the given criteria
+   */
   @Transactional(readOnly = true)
   public Page<StoreDto> getStoreInfoBy(final StoreFilterCriteria criteria) {
-
-    log.info("criteria: {}", criteria);
 
     final Page<Store> storePage = storeRepository.findStoreInfoBy(
             criteria.city(),
@@ -94,6 +99,7 @@ public class StoreInfoService {
             criteria.collectionPoint(),
             criteria.storeLocationType(),
             PageRequest.of(criteria.page(), criteria.size()));
+    log.debug("found {} stores matching criteria", storePage.getTotalElements());
     return mapPage(storePage, storeDtoMapper::storeDto);
   }
 }

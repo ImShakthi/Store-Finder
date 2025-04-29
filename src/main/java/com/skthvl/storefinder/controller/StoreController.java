@@ -66,6 +66,19 @@ public class StoreController {
     return ResponseEntity.status(HttpStatus.CREATED).body(storeDtoMapper.toStoreResponse(storeDto));
   }
 
+  /**
+   * Retrieves a paginated list of stores based on the specified filtering criteria.
+   *
+   * @param city The city where the store is located. Optional parameter.
+   * @param openNow Indicates if only currently open stores should be retrieved. Optional parameter.
+   * @param collectionPoint Indicates if only stores functioning as collection points should be
+   *     included. Optional parameter.
+   * @param storeLocationType The type of store location (e.g., urban, rural). Optional parameter.
+   * @param page The page number to retrieve for the paginated response. Default value is 0.
+   * @param size The number of items per page for the paginated response. Default value is 5.
+   * @return ResponseEntity containing a paginated response with a list of stores that match the
+   *     filtering criteria.
+   */
   @GetMapping
   public ResponseEntity<PaginatedResponse<List<StoreResponse>>> getStores(
       @RequestParam(required = false) final String city,
@@ -86,7 +99,6 @@ public class StoreController {
             .build();
 
     final var storeDtoPage = storeInfoService.getStoreInfoBy(filters);
-
 
     return ResponseEntity.ok(
         new PaginatedResponse(PageUtils.mapPage(storeDtoPage, storeDtoMapper::toStoreResponse)));

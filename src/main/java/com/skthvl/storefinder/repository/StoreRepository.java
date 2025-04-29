@@ -11,7 +11,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-/** Repository for managing store entities with spatial search capabilities using PostGIS. */
+/**
+ * Repository interface for managing store entities with spatial search capabilities using PostGIS.
+ * Provides methods for CRUD operations and advanced spatial queries.
+ */
 @Repository
 public interface StoreRepository extends JpaRepository<Store, BigInteger> {
   /**
@@ -59,20 +62,31 @@ public interface StoreRepository extends JpaRepository<Store, BigInteger> {
       @Param("radiusInMeter") final double radiusInMeter,
       final Pageable pageable);
 
+  /**
+   * Finds stores based on filtering criteria.
+   *
+   * @param city filter by city name
+   * @param openNow filter by store's current operating status
+   * @param collectionPoint filter by collection point availability
+   * @param storeLocationType filter by store location type
+   * @param pageable pagination parameters
+   * @return paginated list of stores matching the criteria
+   */
   @Query(
       value =
           """
-        SELECT s
-        FROM Store s
-        JOIN s.address addr
-        JOIN s.city c
-        JOIN s.storeLocationType loc
-        WHERE (:cityNameParam IS NULL OR c.name = :cityNameParam)
-          AND (:openNowParam IS NULL OR (s.todayOpen <= CURRENT_TIME AND CURRENT_TIME <= s.todayClose))
-          AND (:collectionPointParam IS NULL OR s.collectionPoint = :collectionPointParam)
-          AND (:storeLocationTypeParam IS NULL OR loc.name = :storeLocationTypeParam)
-        ORDER BY s.storeId ASC
-        """,
+                  SELECT s
+                  FROM Store s
+                  JOIN s.address addr
+                  JOIN s.city c
+                  JOIN s.storeLocationType loc
+                  WHERE (:cityNameParam IS NULL OR c.name = :cityNameParam)
+                    AND (:openNowParam IS NULL
+                            OR (s.todayOpen <= CURRENT_TIME AND CURRENT_TIME <= s.todayClose))
+                    AND (:collectionPointParam IS NULL OR s.collectionPoint = :collectionPointParam)
+                    AND (:storeLocationTypeParam IS NULL OR loc.name = :storeLocationTypeParam)
+                  ORDER BY s.storeId ASC
+                  """,
       countQuery =
           """
         SELECT COUNT(s)
@@ -81,7 +95,8 @@ public interface StoreRepository extends JpaRepository<Store, BigInteger> {
         JOIN s.city c
         JOIN s.storeLocationType loc
         WHERE (:cityNameParam IS NULL OR c.name = :cityNameParam)
-          AND (:openNowParam IS NULL OR (s.todayOpen <= CURRENT_TIME AND CURRENT_TIME <= s.todayClose))
+          AND (:openNowParam IS NULL
+          OR (s.todayOpen <= CURRENT_TIME AND CURRENT_TIME <= s.todayClose))
           AND (:collectionPointParam IS NULL OR s.collectionPoint = :collectionPointParam)
           AND (:storeLocationTypeParam IS NULL OR loc.name = :storeLocationTypeParam)
         """)
@@ -92,9 +107,26 @@ public interface StoreRepository extends JpaRepository<Store, BigInteger> {
       @Param("storeLocationTypeParam") String storeLocationType,
       final Pageable pageable);
 
+  /**
+   * Deletes a store by its unique identifier.
+   *
+   * @param storeId the store's unique identifier
+   */
   void deleteByStoreId(final String storeId);
 
+  /**
+   * Finds a store by its unique identifier.
+   *
+   * @param storeId the store's unique identifier
+   * @return an Optional containing the store if found
+   */
   Optional<Store> findByStoreId(final String storeId);
 
+  /**
+   * Checks if a store exists by its unique identifier.
+   *
+   * @param storeId the store's unique identifier
+   * @return true if the store exists, false otherwise
+   */
   boolean existsByStoreId(final String storeId);
 }
