@@ -2,6 +2,7 @@ package com.skthvl.storeapi.config;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
+import com.skthvl.storeapi.filter.JwtAuthenticationFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -45,16 +46,23 @@ public class SecurityConfig {
         "/configuration/security"
       };
 
-  private static final String[] PUBLIC_NO_AUTH_APP_APIs =
-      new String[] {"/api/v1/stores/nearby", "/api/v1/stores", "/api/v1/stores/{storeId}"};
+  private static final String[] PUBLIC_NON_AUTH_APP_APIs =
+      new String[] {
+        "/api/v1/stores/nearby/**",
+        "/api/v1/stores",
+        "/api/v1/stores/{storeId}",
+        "/api/v1/cities",
+        "/api/v1/store-location-types",
+        "/api/v1/stores/{storeId}/operation-status"
+      };
 
   private static final String[] AUTH_APP_APIs = new String[] {};
 
-  //  private final JwtAuthenticationFilter jwtFilter;
-  //
-  //  public SecurityConfig(final JwtAuthenticationFilter jwtFilter) {
-  //    this.jwtFilter = jwtFilter;
-  //  }
+  private final JwtAuthenticationFilter jwtFilter;
+
+  public SecurityConfig(final JwtAuthenticationFilter jwtFilter) {
+    this.jwtFilter = jwtFilter;
+  }
 
   /**
    * Configures the SecurityFilterChain for the application, defining security settings such as
@@ -71,21 +79,18 @@ public class SecurityConfig {
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .authorizeHttpRequests(
             auth ->
-                auth
-                    // public apis (without JWT)
-                    //                    .requestMatchers(PUBLIC_NON_APP_APIs)
-                    //                    .permitAll()
-                    //
-                    //                    .requestMatchers(PUBLIC_NO_AUTH_APP_APIs)
-                    //                    .permitAll()
+                auth.requestMatchers(PUBLIC_NON_APP_APIs)
+                    .permitAll()
+                    .requestMatchers(PUBLIC_NON_AUTH_APP_APIs)
+                    .permitAll()
 
                     // auth apis (with JWT)
-                    //                    .requestMatchers(AUTH_APP_APIs)
-                    //                    .authenticated()
+                    .requestMatchers(AUTH_APP_APIs)
+                    .authenticated()
 
                     // Other APIs
                     .anyRequest()
-                    .permitAll())
+                    .denyAll())
 
         // Stateless session (required for JWT)
         .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

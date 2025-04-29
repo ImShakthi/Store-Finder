@@ -133,6 +133,6 @@ public class StoreController {
       @PathVariable("storeId") final String storeId) {
     storeService.deleteStore(storeId);
 
-    return ResponseEntity.ok().body(new MessageResponse("store details is modified."));
+    return ResponseEntity.ok().body(new MessageResponse("store details is deleted."));
   }
 }
