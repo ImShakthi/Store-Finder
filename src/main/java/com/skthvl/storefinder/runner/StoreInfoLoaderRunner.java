@@ -18,7 +18,7 @@ public class StoreInfoLoaderRunner implements ApplicationRunner {
   /**
    * File path to the JSON file containing store information, configured in application properties.
    */
-  @Value("${store-finder.data.json.stores-info}")
+  @Value("${store-api.data.json.stores-info}")
   private String storesInfoFilePath;
 
   /** Service component responsible for loading store data into the database. */

@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for CineMetrics
+name: CI/CD Pipeline for store-api
 
 on:
   push:
@@ -47,7 +47,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            imshakthi/cinemetrics-api
+            imshakthi/store-api
           tags: |
             type=ref,event=branch
             type=ref,event=pr

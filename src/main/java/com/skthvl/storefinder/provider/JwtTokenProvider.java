@@ -29,8 +29,8 @@ public class JwtTokenProvider {
   private final long jwtExpirationInMilliseconds;
 
   public JwtTokenProvider(
-      @Value("${store-finder.jwt.secret}") final String jwtSecret,
-      @Value("${store-finder.jwt.expiration-in-milliseconds}")
+      @Value("${store-api.jwt.secret}") final String jwtSecret,
+      @Value("${store-api.jwt.expiration-in-milliseconds}")
           final long jwtExpirationInMilliseconds) {
     this.jwtSecret = jwtSecret;
     this.jwtExpirationInMilliseconds = jwtExpirationInMilliseconds;

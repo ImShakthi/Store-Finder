@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class JasyptConfig {
 
-  @Value("${store-finder.env.jasypt-encryptor-password}")
+  @Value("${store-api.env.jasypt-encryptor-password}")
   private String jasyptEncryptorPassword;
 
   /**

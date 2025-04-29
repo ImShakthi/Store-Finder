@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: Store-Finder
+    name: Store-Api
   liquibase:
     enabled: true
     drop-first: false
@@ -31,7 +31,7 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
 
-store-finder:
+store-api:
   data:
     json:
       stores-info: db/data/stores.json

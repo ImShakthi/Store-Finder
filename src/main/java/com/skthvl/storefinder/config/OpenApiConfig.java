@@ -20,10 +20,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
 
-  @Value("${store-finder.openapi.dev-url}")
+  @Value("${store-api.openapi.dev-url}")
   private String devUrl;
 
-  @Value("${store-finder.openapi.prod-url}")
+  @Value("${store-api.openapi.prod-url}")
   private String prodUrl;
 
   /**
@@ -53,7 +53,7 @@ public class OpenApiConfig {
 
     final Info info =
         new Info()
-            .title("Store-Finder API")
+            .title("Store-Api API")
             .version("1.0")
             .contact(contact)
             .description(

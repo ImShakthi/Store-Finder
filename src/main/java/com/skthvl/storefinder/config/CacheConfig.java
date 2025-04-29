@@ -16,7 +16,7 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 @Configuration
 public class CacheConfig {
 
-  @Value("${store-finder.cache.expiration-in-minutes:3000}")
+  @Value("${store-api.cache.expiration-in-minutes:3000}")
   private int expirationTime;
 
   private final RedisConnectionFactory connectionFactory;

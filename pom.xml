@@ -10,10 +10,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.skthvl</groupId>
-    <artifactId>Store-Finder</artifactId>
+    <artifactId>store-api</artifactId>
     <version>0.0.1</version>
-    <name>Store-Finder</name>
-    <description>Store-Finder</description>
+    <name>store-api</name>
+    <description>store-api</description>
     <properties>
         <java.version>21</java.version>
         <mapstruct.version>1.6.3</mapstruct.version>
@@ -162,7 +162,7 @@
     </dependencies>
 
     <build>
-        <finalName>store-finder-api</finalName>
+        <finalName>store-api</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

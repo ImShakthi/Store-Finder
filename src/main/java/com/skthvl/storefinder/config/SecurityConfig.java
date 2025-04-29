@@ -29,7 +29,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig {
 
-  @Value("#{'${store-finder.security.cors-allowed-origins}'.split(',')}")
+  @Value("#{'${store-api.security.cors-allowed-origins}'.split(',')}")
   private List<String> corsAllowedUrls;
 
   private static final String[] PUBLIC_NON_APP_APIs =

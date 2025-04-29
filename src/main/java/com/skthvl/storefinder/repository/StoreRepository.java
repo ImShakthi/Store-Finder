@@ -82,24 +82,38 @@ public interface StoreRepository extends JpaRepository<Store, BigInteger> {
                   JOIN s.storeLocationType loc
                   WHERE (:cityNameParam IS NULL OR c.name = :cityNameParam)
                     AND (:openNowParam IS NULL
-                            OR (s.todayOpen <= CURRENT_TIME AND CURRENT_TIME <= s.todayClose))
+                      OR( 
+                         (:openNowParam = TRUE 
+                             AND s.todayOpen < CURRENT_TIME AND CURRENT_TIME < s.todayClose) 
+                          OR(:openNowParam = FALSE 
+                              AND (s.todayOpen > CURRENT_TIME OR CURRENT_TIME > s.todayClose)
+                            )
+                         )
+                        )
                     AND (:collectionPointParam IS NULL OR s.collectionPoint = :collectionPointParam)
                     AND (:storeLocationTypeParam IS NULL OR loc.name = :storeLocationTypeParam)
                   ORDER BY s.storeId ASC
                   """,
       countQuery =
           """
-        SELECT COUNT(s)
-        FROM Store s
-        JOIN s.address addr
-        JOIN s.city c
-        JOIN s.storeLocationType loc
-        WHERE (:cityNameParam IS NULL OR c.name = :cityNameParam)
-          AND (:openNowParam IS NULL
-          OR (s.todayOpen <= CURRENT_TIME AND CURRENT_TIME <= s.todayClose))
-          AND (:collectionPointParam IS NULL OR s.collectionPoint = :collectionPointParam)
-          AND (:storeLocationTypeParam IS NULL OR loc.name = :storeLocationTypeParam)
-        """)
+                  SELECT COUNT(s)
+                  FROM Store s
+                  JOIN s.address addr
+                  JOIN s.city c
+                  JOIN s.storeLocationType loc
+                  WHERE (:cityNameParam IS NULL OR c.name = :cityNameParam)
+                    AND (:openNowParam IS NULL
+                      OR( 
+                         (:openNowParam = TRUE 
+                             AND s.todayOpen <= CURRENT_TIME AND CURRENT_TIME <= s.todayClose) 
+                          OR(:openNowParam = FALSE 
+                              AND (s.todayOpen > CURRENT_TIME OR CURRENT_TIME > s.todayClose)
+                            )
+                         )
+                      )
+                    AND (:collectionPointParam IS NULL OR s.collectionPoint = :collectionPointParam)
+                    AND (:storeLocationTypeParam IS NULL OR loc.name = :storeLocationTypeParam)
+                  """)
   Page<Store> findStoreInfoBy(
       @Param("cityNameParam") String city,
       @Param("openNowParam") Boolean openNow,
