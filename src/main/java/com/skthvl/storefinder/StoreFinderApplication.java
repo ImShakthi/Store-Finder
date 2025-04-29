@@ -1,7 +1,5 @@
 package com.skthvl.storefinder;
 
-import jakarta.annotation.PostConstruct;
-import java.util.TimeZone;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -18,13 +16,5 @@ public class StoreFinderApplication {
    */
   public static void main(final String[] args) {
     SpringApplication.run(StoreFinderApplication.class, args);
-  }
-
-  @PostConstruct
-  public void init() {
-    final var envAppTimeZone = System.getenv("APP_TIMEZONE");
-    final var timeZone =
-        envAppTimeZone != null ? TimeZone.getTimeZone(envAppTimeZone) : TimeZone.getDefault();
-    TimeZone.setDefault(timeZone);
   }
 }
