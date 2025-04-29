@@ -26,7 +26,7 @@
 
         <insert tableName="user_account">
             <column name="name">admin</column>
-            <column name="password_hash">$2a$10$VCLsbE5ST5d/OtCRbXEVZuDZvnT9gj9Z3MRINuU8yaGXBP9/5LeDa</column>
+            <column name="password_hash">$2a$10$TavJxS5NB5JnyMDYT9NqQOY4Ta/ACzbQoS3QSKr/TWMqMknNg5P8i</column>
         </insert>
     </changeSet>
 </databaseChangeLog>

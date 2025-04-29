@@ -3,7 +3,15 @@ server:
 
 spring:
   application:
-    name: Store-Api
+    name: store-api
+  cache:
+    type: redis
+  data:
+    redis:
+      host: ${SPRING_REDIS_HOST}
+      port: ${SPRING_REDIS_PORT}
+      username: ${SPRING_REDIS_USERNAME}
+      password: ${SPRING_REDIS_PASSWORD}
   liquibase:
     enabled: true
     drop-first: false
@@ -42,6 +50,6 @@ store-api:
     secret: ENC(4nTDQ+2B0xRBQJ94Dac5XOG3JQlV+OsPlmreixBQSvTecWcTAcOJGcoJg8SIU4IL81qNknHxTTAHvfgyeZjF0TR8GdwDUboBtKM8kxDPDzk=)
     expiration-in-milliseconds: 600000
   env:
-    jasypt-encryptor-password: jasypt-itest
+    jasypt-encryptor-password: ${JASYPT_ENCRYPTOR_PASSWORD}
   security:
     cors-allowed-origins: http://localhost:8080,http://localhost:3000

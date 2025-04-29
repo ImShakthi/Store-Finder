@@ -35,7 +35,7 @@ public class FileUtil {
       byte[] checksumBytes = digest.digest();
       return bytesToHex(checksumBytes).trim();
     } catch (Exception e) {
-      log.error("Error getting checksum for file: {}", filePath, e);
+      log.error("Error getting checksum for file: {}", filePath, e.getMessage());
     }
     return null;
   }

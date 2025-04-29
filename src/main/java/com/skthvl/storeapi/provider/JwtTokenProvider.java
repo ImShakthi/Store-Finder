@@ -53,6 +53,17 @@ public class JwtTokenProvider {
   }
 
   /**
+   * Generates a JSON Web Token (JWT) for the specified subject (e.g., username). The token is
+   * created with the current timestamp, a default expiration period.
+   *
+   * @param subject the subject for which the token is being generated, typically a username
+   * @return a signed JWT as a String
+   */
+  public String generateToken(final String subject) {
+    return generateToken(subject, new Date(System.currentTimeMillis()));
+  }
+
+  /**
    * Generates a JSON Web Token (JWT) containing the specified subject, roles, and an issue date.
    * The token is created with a timestamp based on the provided current date and an expiration
    * period defined by the class's configuration. Each token includes a unique identifier (JTI).

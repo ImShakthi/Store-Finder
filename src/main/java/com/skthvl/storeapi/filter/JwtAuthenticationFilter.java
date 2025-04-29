@@ -1,7 +1,5 @@
 package com.skthvl.storeapi.filter;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skthvl.storeapi.provider.JwtTokenProvider;
 import com.skthvl.storeapi.service.InvalidatedTokenService;
 import io.jsonwebtoken.Claims;
@@ -10,12 +8,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -55,30 +49,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
 
-    String header = request.getHeader("Authorization");
+    final String header = request.getHeader("Authorization");
     if (header != null && header.startsWith("Bearer ")) {
       final String token = header.substring(7);
-
+      log.info("JWT token: {}", token);
       if (invalidatedTokenService.isTokenInvalidated(token)) {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token is invalidated");
       }
+      log.info("Token is invalidated");
 
       if (jwtTokenProvider.validateToken(token)) {
         final Claims claims = jwtTokenProvider.extractClaims(token);
-
+        log.info("Claims are: {}", claims);
         final String username = claims.getSubject();
-        ObjectMapper mapper = new ObjectMapper();
-        final List<String> roles =
-            mapper.convertValue(claims.get("roles"), new TypeReference<>() {});
-        List<GrantedAuthority> authorities =
-            roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-
-        log.debug("username: {} Roles: {} authorities {}", username, roles, authorities);
 
         final UsernamePasswordAuthenticationToken authToken =
-            new UsernamePasswordAuthenticationToken(username, null, authorities);
+            new UsernamePasswordAuthenticationToken(username, null, null);
 
         SecurityContextHolder.getContext().setAuthentication(authToken);
+      } else {
+        log.info("Token is expired");
       }
     }
 

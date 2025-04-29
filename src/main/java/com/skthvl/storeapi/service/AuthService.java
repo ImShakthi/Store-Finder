@@ -33,6 +33,6 @@ public class AuthService {
    */
   public String authenticateAndGenerateToken(final UserDto userDto) {
     final var user = userAccountService.getValidUserByCredential(userDto);
-    return jwtTokenProvider.generateTokenWithRoles(userDto.userName());
+    return jwtTokenProvider.generateTokenWithRoles(user.getName());
   }
 }
