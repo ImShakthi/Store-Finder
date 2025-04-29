@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/** GetCitiesResponse represent list of cities store are present. */
 @Getter
 @Setter
 @AllArgsConstructor

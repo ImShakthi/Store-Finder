@@ -52,7 +52,8 @@ public class GlobalExceptionHandler {
    * Handles {@code MissingServletRequestParameterException} by returning a BAD_REQUEST response
    * with a message indicating the missing parameter.
    *
-   * @param ex the MissingServletRequestParameterException containing details about the missing parameter
+   * @param ex the MissingServletRequestParameterException containing details about the missing
+   *     parameter
    * @return a map containing an error message with the key "error"
    */
   @ExceptionHandler(MissingServletRequestParameterException.class)
