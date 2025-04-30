@@ -60,6 +60,11 @@ public class StoreInfoLoader {
   public void loadDataIntoDatabase(final String filePath) {
     try {
       final var fileChecksum = FileUtil.calculateChecksum(filePath, MD5.name());
+      if (fileChecksum == null) {
+        log.error("error in calculating checksum for file '{}'", filePath);
+        return;
+      }
+
       if (hasDataAlreadyMigrated(filePath, fileChecksum)) {
         log.info("data in '{}' already migrated into database", filePath);
         return;
@@ -70,7 +75,7 @@ public class StoreInfoLoader {
               .map(storeMapper::toStore)
               .filter(Objects::nonNull)
               .toList();
-      log.info("loaded {} stores", stores.size());
+      log.debug("loaded {} stores", stores.size());
 
       storeRepository.saveAll(stores);
 

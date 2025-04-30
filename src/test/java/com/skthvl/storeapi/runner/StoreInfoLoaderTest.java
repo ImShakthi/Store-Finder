@@ -1,7 +1,9 @@
 package com.skthvl.storeapi.runner;
 
 import static java.util.Objects.requireNonNull;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -49,16 +51,45 @@ class StoreInfoLoaderTest {
   void loadDataIntoDatabase_ShouldLoadJsonDataIntoDatabase() {
     final var inputFilePath = "data/testdata/stores.json";
     final var storesDto = getStoresFromJsonFile(inputFilePath);
-    final var store = toStore(storesDto.getFirst());
-    final var stores = List.of(store);
+    final var store1 = toStore(storesDto.getFirst());
+    final var store2 = toStore(storesDto.getLast());
+    final var stores = List.of(store1, store2);
 
     when(dataFileMigrationRepository.existsByFilePathAndFileChecksum(
-            inputFilePath, "8304cd2c909a5ee6ab3604bc78283578"))
+            inputFilePath, "711d4eeb94d4a474dcf727381e9c3237"))
         .thenReturn(false);
-    doReturn(store).when(storeMapper).toStore(storesDto.getFirst());
+    when(storeMapper.toStore(storesDto.getFirst())).thenReturn(store1);
+    when(storeMapper.toStore(storesDto.getLast())).thenReturn(store2);
     when(storeRepository.saveAll(stores)).thenReturn(stores);
 
     storeInfoLoader.loadDataIntoDatabase(inputFilePath);
+
+    verify(storeMapper, times(2)).toStore(any());
+    verify(storeRepository, times(1)).saveAll(any());
+  }
+
+  @Test
+  void loadDataIntoDatabase_ShouldNotLoadJsonDataIntoDatabase_WhenDataAlreadyMigrated() {
+    final var inputFilePath = "data/testdata/stores.json";
+
+    when(dataFileMigrationRepository.existsByFilePathAndFileChecksum(
+            inputFilePath, "711d4eeb94d4a474dcf727381e9c3237"))
+        .thenReturn(true);
+
+    storeInfoLoader.loadDataIntoDatabase(inputFilePath);
+    verify(storeMapper, times(0)).toStore(any());
+    verify(storeRepository, times(0)).saveAll(any());
+  }
+
+  @Test
+  void loadDataIntoDatabase_ShouldNotLoadJsonDataIntoDatabase_WhenJsonPathIsInvalid() {
+    final var inputFilePath = "invalid/path/to/file.json";
+
+    storeInfoLoader.loadDataIntoDatabase(inputFilePath);
+
+    verify(dataFileMigrationRepository, times(0)).existsByFilePathAndFileChecksum(any(), any());
+    verify(storeMapper, times(0)).toStore(any());
+    verify(storeRepository, times(0)).saveAll(any());
   }
 
   private Store toStore(final StoreDto storeDto) {

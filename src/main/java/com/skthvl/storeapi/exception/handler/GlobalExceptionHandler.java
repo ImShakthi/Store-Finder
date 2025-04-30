@@ -123,8 +123,8 @@ public class GlobalExceptionHandler {
     ex.getConstraintViolations()
         .forEach(
             violation -> {
-              String field = violation.getPropertyPath().toString();
-              String message = violation.getMessage();
+              final String field = violation.getPropertyPath().toString();
+              final String message = violation.getMessage();
               errors.put(field, message);
             });
     return errors;
@@ -133,7 +133,6 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ErrorResponse handleGeneric(final Exception ex) {
-    ex.printStackTrace();
     return new ErrorResponse("something went wrong, please try again later");
   }
 
