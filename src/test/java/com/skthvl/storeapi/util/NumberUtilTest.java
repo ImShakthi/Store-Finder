@@ -101,4 +101,15 @@ class NumberUtilTest {
 
     assertEquals(3000, result);
   }
+
+
+  @Test
+  void testParseRadiusToMeters_InvalidFormat_NonNumericMeters() {
+    // Input with negative meter value
+    final String input = "ABCm";
+
+    // Expected to throw InvalidInputException
+    Assertions.assertThrows(
+            InvalidInputException.class, () -> NumberUtil.parseRadiusToMeters(input));
+  }
 }

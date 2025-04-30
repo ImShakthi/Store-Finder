@@ -133,6 +133,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(Exception.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ErrorResponse handleGeneric(final Exception ex) {
+    ex.printStackTrace();
     return new ErrorResponse("something went wrong, please try again later");
   }
 

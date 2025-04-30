@@ -118,6 +118,27 @@ class StoreApiApplicationTests {
     assertFalse(
         storeRepository.findByStoreId(storeId).isPresent(),
         "Store should not exist after deletion.");
+
+    // must return 401 without Auth Bearer
+    given()
+        // No Auth Bearer added to header
+        .basePath(BASE_STORE_URL)
+        .contentType(ContentType.JSON)
+        .accept(ContentType.JSON)
+        .body(requestBody)
+        .when()
+        .post()
+        .then()
+        .statusCode(401);
+
+    given()
+        // No Auth Bearer added to header
+        .basePath(BASE_STORE_URL + "/{storeId}")
+        .pathParam("storeId", storeId)
+        .when()
+        .delete()
+        .then()
+        .statusCode(401);
   }
 
   @Test
