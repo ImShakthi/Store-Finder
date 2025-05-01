@@ -9,6 +9,7 @@ supports geospatial queries to identify stores near a specific coordinate within
 - Find the top `N` nearby stores based on:
     - Input `longitude`, `latitude`
     - Optional `radius` (e.g., `800m`, `10km`)
+    - Optional `size` (default - 5)
 - Retrieve a list of stores with optional filters by:
     - `city`
     - `collectionPoint`
@@ -16,9 +17,9 @@ supports geospatial queries to identify stores near a specific coordinate within
     - `openNow`
 - Add, update, or delete store records (secured via JWT-based authentication)
 - Fetch lists of:
+    - Store information
     - Available cities
     - Store location types
-  - Address information
 - 🛠️ Developer Tooling
   - **[Swagger UI](https://jumbo-store-api-f1ae1b3de689.herokuapp.com/swagger-ui/index.html)** –
     Interactive API documentation
@@ -27,8 +28,8 @@ supports geospatial queries to identify stores near a specific coordinate within
     deployment
   - **[GitHub Actions](https://github.com/ImShakthi/Store-Finder/actions)** – Automated CI/CD
     pipeline
-  - Postman collection
-    `[stores-api.postman_collection.json](https://github.com/ImShakthi/Store-Finder/blob/main/stores-api.postman_collection.json)`
+  - Postman collection - 
+    [stores-api.postman_collection.json](https://github.com/ImShakthi/Store-Finder/blob/main/stores-api.postman_collection.json)
   - Google checkstyle incorporated - `./mvnw clean checkstyle:checkstyle`
 
 ## Techstack used👾
@@ -96,7 +97,7 @@ control._
 
 ### 📦 Setup and Run
 
-This application is Dockerized using docker-compose.yml, bundling the backend, MySQL, and Redis.
+This application is Dockerized using docker-compose.yml, bundling the backend, Postgres, and Redis.
 
 1. Clone the repository
 
@@ -134,7 +135,7 @@ CI/CD is handled via GitHub Actions and Heroku.
 - Live Deployment (Heroku)
   https://jumbo-store-api-f1ae1b3de689.herokuapp.com/swagger-ui/index.html
 
-*
+
 
 *_📝 Note: The Heroku server is hosted on a free-tier plan. Expect some delay due to cold starts when
 inactive._**
@@ -173,7 +174,7 @@ To run the app locally, build the project and start the services using Docker Co
 
 docker-compose --env-file=.env up --build
 ```
-
+_⚠️Note: create `.env` file if not exist and never commit it to repository._ 
 ## 📬 Test the API
 
 You can test the REST APIs via:
