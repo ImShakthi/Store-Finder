@@ -2,6 +2,7 @@ package com.skthvl.storeapi.repository;
 
 import com.skthvl.storeapi.entity.City;
 import java.math.BigInteger;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +12,6 @@ import org.springframework.stereotype.Repository;
  * operations on the city table.
  */
 @Repository
-public interface CityRepository extends JpaRepository<City, BigInteger> {}
+public interface CityRepository extends JpaRepository<City, BigInteger> {
+  Optional<City> findByName(String name);
+}

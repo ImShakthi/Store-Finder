@@ -93,6 +93,38 @@ public class StoreMapper {
         .build();
   }
 
+  /**
+   * Updates an existing Store entity with values derived from the provided StoreDto. This method
+   * modifies the Store entity's properties, excluding the storeId, which remains unaltered. It also
+   * handles the retrieval or creation of related entities such as City, Address, and
+   * StoreLocationType.
+   *
+   * @param store The existing Store entity to be updated.
+   * @param storeDto The data transfer object containing the new values for the Store entity's
+   *     properties.
+   * @return The updated Store entity with properties set according to the StoreDto.
+   */
+  @Transactional
+  public Store modifyFrom(final Store store, final StoreDto storeDto) {
+    final var city = getOrCreateCity(storeDto);
+    final var storeLocationType = getOrCreateStoreLocationType(storeDto);
+    final var address = getOrCreateAddress(storeDto);
+
+    // storeId must not be modified
+    store.setCity(city);
+    store.setStoreLocationType(storeLocationType);
+    store.setAddress(address);
+    store.setSapStoreId(storeDto.getSapStoreId());
+    store.setComplexNumber(storeDto.getComplexNumber());
+    store.setLocation(getLocation(storeDto));
+    store.setTodayClose(storeDto.getTodayClose());
+    store.setTodayOpen(storeDto.getTodayOpen());
+    store.setShowWarningMessage(storeDto.isShowWarningMessage());
+    store.setCollectionPoint(storeDto.isCollectionPoint());
+
+    return store;
+  }
+
   private Address getAddress(final StoreDto storeDto) {
     final var key = generateAddressKey(storeDto);
     return addressCache.computeIfAbsent(
@@ -146,5 +178,23 @@ public class StoreMapper {
 
   private String getStoreId(final StoreDto storeDto) {
     return isNull(storeDto.getStoreId()) ? UUID.randomUUID().toString() : storeDto.getStoreId();
+  }
+
+  private City getOrCreateCity(final StoreDto storeDto) {
+    return cityRepository
+        .findByName(storeDto.getCity())
+        .orElseGet(() -> cityRepository.save(populateCity(storeDto)));
+  }
+
+  private Address getOrCreateAddress(final StoreDto storeDto) {
+    return addressRepository
+        .findByAddressNameAndPostalCode(storeDto.getAddressName(), storeDto.getPostalCode())
+        .orElseGet(() -> addressRepository.save(populateAddress(storeDto)));
+  }
+
+  private StoreLocationType getOrCreateStoreLocationType(final StoreDto storeDto) {
+    return storeLocationTypeRepository
+        .findByName(storeDto.getLocationType())
+        .orElseGet(() -> storeLocationTypeRepository.save(populateLocType(storeDto)));
   }
 }

@@ -61,9 +61,9 @@ public class StoreService {
     final var store =
         storeRepository.findByStoreId(storeId).orElseThrow(StoreNotFoundException::new);
 
-    // TODO: add logic to modify store details
+    final var updatedStore = storeMapper.modifyFrom(store, storeDto);
 
-    return storeDtoMapper.storeDto(store);
+    return storeDtoMapper.storeDto(storeRepository.save(updatedStore));
   }
 
   /**

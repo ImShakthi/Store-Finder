@@ -2,6 +2,7 @@ package com.skthvl.storeapi.repository;
 
 import com.skthvl.storeapi.entity.Address;
 import java.math.BigInteger;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +12,6 @@ import org.springframework.stereotype.Repository;
  * geographical extensions.
  */
 @Repository
-public interface AddressRepository extends JpaRepository<Address, BigInteger> {}
+public interface AddressRepository extends JpaRepository<Address, BigInteger> {
+  Optional<Address> findByAddressNameAndPostalCode(String addressName, String postalCode);
+}
