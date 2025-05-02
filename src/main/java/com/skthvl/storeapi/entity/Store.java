@@ -111,7 +111,7 @@ public class Store extends Auditable {
     return isWithinOperatingHours(now);
   }
 
-  private boolean isWithinOperatingHours(LocalTime time) {
-    return !time.isBefore(todayOpen) && time.isBefore(todayClose);
+  private boolean isWithinOperatingHours(final LocalTime time) {
+    return time.isAfter(todayOpen) && time.isBefore(todayClose);
   }
 }
