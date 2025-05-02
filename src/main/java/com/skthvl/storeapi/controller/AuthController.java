@@ -64,7 +64,6 @@ public class AuthController {
                 .userName(request.getUsername())
                 .password(request.getPassword())
                 .build());
-    log.info("Login token generated: {}", token);
 
     return ResponseEntity.ok(new LoginResponse(token));
   }

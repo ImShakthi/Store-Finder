@@ -81,4 +81,18 @@ public class StoreService {
     storeRepository.deleteByStoreId(storeId);
     log.info("store with id {} is deleted", storeId);
   }
+
+  /**
+   * Get a store information from the system by its unique identifier.
+   *
+   * @param storeId Identifier of the store to be fetched
+   * @throws StoreNotFoundException if store with given ID is not found
+   */
+  @Transactional(readOnly = true)
+  public StoreDto getStore(final String storeId) {
+    final var store =
+        storeRepository.findByStoreId(storeId).orElseThrow(StoreNotFoundException::new);
+
+    return storeDtoMapper.storeDto(store);
+  }
 }

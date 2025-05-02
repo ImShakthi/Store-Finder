@@ -135,4 +135,18 @@ public class StoreController {
 
     return ResponseEntity.ok().body(new MessageResponse("store details is deleted."));
   }
+
+  /**
+   * Retrieves the details of a store based on the specified store ID.
+   *
+   * @param storeId The ID of the store to retrieve details for
+   * @return ResponseEntity containing the details of the store in the form of a StoreResponse
+   */
+  @GetMapping("/{storeId}")
+  public ResponseEntity<StoreResponse> getStore(@PathVariable("storeId") final String storeId) {
+
+    final var storeDto = storeService.getStore(storeId);
+
+    return ResponseEntity.ok().body(storeDtoMapper.toStoreResponse(storeDto));
+  }
 }

@@ -23,7 +23,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 public class ApiLoggingFilter extends OncePerRequestFilter {
 
   private static final List<String> SKIP_LOGGING_FOR_URI =
-      List.of("/api-docs", "/swagger-ui", "/h2-console");
+      List.of("/api-docs", "/swagger-ui", "/h2-console", "/actuator/health", "/api/v1/auth/login");
 
   /**
    * Processes incoming HTTP requests and responses, and logs their details such as method, URI, and

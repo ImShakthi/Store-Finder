@@ -83,10 +83,11 @@ class StoreApiApplicationTests {
   }
 
   @Test
-  void shouldCreateAndDeleteStoreSuccessfully() {
-    final var requestBody = getTestStoreRequestBody();
+  void shouldCrudStoreSuccessfully() {
+    final var requestBody = getTestStoreRequestBody(true);
     final var token = getAdminToken();
 
+    // Create store
     final var storeId =
         given()
             .header("Authorization", "Bearer " + token)
@@ -101,10 +102,36 @@ class StoreApiApplicationTests {
             .extract()
             .path("storeId")
             .toString();
-
     assertTrue(
         storeRepository.findByStoreId(storeId).isPresent(), "Store should exist after creation.");
 
+    // Get store by storeId
+    given()
+        .basePath(BASE_STORE_URL + "/{storeId}")
+        .pathParam("storeId", storeId)
+        .when()
+        .get()
+        .then()
+        .statusCode(200)
+        .body("storeId", equalTo(storeId))
+        .body("showWarningMessage", equalTo(true));
+
+    // Modify store
+    given()
+        .header("Authorization", "Bearer " + token)
+        .basePath(BASE_STORE_URL + "/{storeId}")
+        .pathParam("storeId", storeId)
+        .contentType(ContentType.JSON)
+        .accept(ContentType.JSON)
+        .body(getTestStoreRequestBody(false))
+        .when()
+        .put()
+        .then()
+        .statusCode(200)
+        .body("storeId", equalTo(storeId))
+        .body("showWarningMessage", equalTo(false));
+
+    // Delete store
     given()
         .header("Authorization", "Bearer " + token)
         .basePath(BASE_STORE_URL + "/{storeId}")
@@ -118,23 +145,48 @@ class StoreApiApplicationTests {
     assertFalse(
         storeRepository.findByStoreId(storeId).isPresent(),
         "Store should not exist after deletion.");
+  }
 
-    // must return 401 without Auth Bearer
+  @Test
+  void shouldReturn401ForUnauthorizedAccess() {
+
+    // logout
     given()
         // No Auth Bearer added to header
-        .basePath(BASE_STORE_URL)
+        .basePath("/api/v1/auth/logout")
         .contentType(ContentType.JSON)
         .accept(ContentType.JSON)
-        .body(requestBody)
         .when()
         .post()
         .then()
         .statusCode(401);
 
+    // Create store without Auth Bearer
     given()
         // No Auth Bearer added to header
-        .basePath(BASE_STORE_URL + "/{storeId}")
-        .pathParam("storeId", storeId)
+        .basePath(BASE_STORE_URL)
+        .contentType(ContentType.JSON)
+        .accept(ContentType.JSON)
+        .when()
+        .post()
+        .then()
+        .statusCode(401);
+
+    // Modify store without Auth Bearer
+    given()
+        // No Auth Bearer added to header
+        .basePath(BASE_STORE_URL + "/storeId")
+        .contentType(ContentType.JSON)
+        .accept(ContentType.JSON)
+        .when()
+        .put()
+        .then()
+        .statusCode(401);
+
+    // Delete store without Auth Bearer
+    given()
+        // No Auth Bearer added to header
+        .basePath(BASE_STORE_URL + "/storeId")
         .when()
         .delete()
         .then()
@@ -143,6 +195,7 @@ class StoreApiApplicationTests {
 
   @Test
   void shouldReturnCorrectCitiesAndLocationTypesAndStoreStatus() {
+    // Get cities
     given()
         .basePath(BASE_CITY_URL)
         .accept(ContentType.JSON)
@@ -152,6 +205,7 @@ class StoreApiApplicationTests {
         .statusCode(200)
         .body("noOfCities", equalTo(375));
 
+    // Get store location types
     final var actualLocationTypeResponse =
         given()
             .basePath(BASE_STORE_LOCATION_TYPE_URL)
@@ -166,6 +220,7 @@ class StoreApiApplicationTests {
     final var expectedLocationTypes = "{\"types\":[\"SupermarktPuP\",\"Supermarkt\",\"PuP\"]}";
     assertEquals(expectedLocationTypes, actualLocationTypeResponse);
 
+    // Get store operation status
     given()
         .basePath(BASE_STORE_URL + "/{storeId}/operation-status")
         .pathParam("storeId", "EOgKYx4XFiQAAAFJa_YYZ4At")
@@ -187,6 +242,7 @@ class StoreApiApplicationTests {
     double latitude = 52.633740;
     String nearbyUrl = BASE_STORE_URL + "/nearby";
 
+    // Get nearby stores without radius
     validateNearbyStoresResponse(
         nearbyUrl,
         longitude,
@@ -194,6 +250,7 @@ class StoreApiApplicationTests {
         null,
         "data/testdata/nearby-stores-response-without-radius-input.json");
 
+    // Get nearby stores with radius 800m
     validateNearbyStoresResponse(
         nearbyUrl,
         longitude,
@@ -201,6 +258,7 @@ class StoreApiApplicationTests {
         "800m",
         "data/testdata/nearby-stores-response-with-radius-800m-input.json");
 
+    // Get nearby stores with radius 10km
     validateNearbyStoresResponse(
         nearbyUrl,
         longitude,
@@ -247,7 +305,7 @@ class StoreApiApplicationTests {
         expectedResponse, actualResponse, "Nearby stores response does not match expected.");
   }
 
-  private String getTestStoreRequestBody() {
+  private String getTestStoreRequestBody(final boolean showWarningMessage) {
     return """
             {
               "city": "Amsterdam",
@@ -259,13 +317,15 @@ class StoreApiApplicationTests {
               "longitude": "6.245829",
               "latitude": "51.874272",
               "complexNumber": "30171",
-              "showWarningMessage": true,
+              "showWarningMessage": %s,
+              "collectionPoint": false,
               "todayOpen": "08:00",
               "locationType": "Supermarkt",
               "sapStoreId": "467681",
               "todayClose": "21:00"
             }
-        """;
+        """
+        .formatted(showWarningMessage);
   }
 
   private String getAdminToken() {

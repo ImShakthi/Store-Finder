@@ -52,7 +52,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     final String header = request.getHeader("Authorization");
     if (header != null && header.startsWith("Bearer ")) {
       final String token = header.substring(7);
-      log.info("JWT token: {}", token);
       if (invalidatedTokenService.isTokenInvalidated(token)) {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token is invalidated");
       }
@@ -60,7 +59,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
       if (jwtTokenProvider.validateToken(token)) {
         final Claims claims = jwtTokenProvider.extractClaims(token);
-        log.info("Claims are: {}", claims);
         final String username = claims.getSubject();
 
         final UsernamePasswordAuthenticationToken authToken =
@@ -68,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         SecurityContextHolder.getContext().setAuthentication(authToken);
       } else {
-        log.info("Token is expired");
+        log.error("Token is expired");
       }
     }
 

@@ -38,7 +38,7 @@ public class StoreLocationTypeController {
     final var types =
         storeLocationTypeRepository.findAll().stream().map(StoreLocationType::getName).toList();
 
-    log.info("types of store location are {}.", types.size());
+    log.debug("types of store location are {}.", types.size());
 
     return ResponseEntity.ok(new GetStoreLocationTypeResponse(types));
   }

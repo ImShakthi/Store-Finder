@@ -90,6 +90,8 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/v1/stores")
                     .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/v1/stores/{storeId}")
+                    .permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/v1/stores/{storeId}/operation-status")
                     .permitAll()
 
@@ -98,9 +100,9 @@ public class SecurityConfig {
                     .authenticated()
                     .requestMatchers(HttpMethod.POST, "/api/v1/stores")
                     .authenticated()
-                    .requestMatchers(HttpMethod.PUT, "/api/v1/stores")
+                    .requestMatchers(HttpMethod.PUT, "/api/v1/stores/{storeId}")
                     .authenticated()
-                    .requestMatchers(HttpMethod.DELETE, "/api/v1/stores")
+                    .requestMatchers(HttpMethod.DELETE, "/api/v1/stores/{storeId}")
                     .authenticated()
                     .requestMatchers(HttpMethod.DELETE, "/api/v1/users")
                     .authenticated()
@@ -115,8 +117,7 @@ public class SecurityConfig {
                 ex.authenticationEntryPoint(
                         (req, res, ex1) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED))
                     .accessDeniedHandler(
-                        (req, res, ex2) -> res.sendError(HttpServletResponse.SC_FORBIDDEN)))
-    ;
+                        (req, res, ex2) -> res.sendError(HttpServletResponse.SC_FORBIDDEN)));
 
     return http.build();
   }

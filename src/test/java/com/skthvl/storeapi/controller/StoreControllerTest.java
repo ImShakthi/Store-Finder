@@ -106,6 +106,23 @@ class StoreControllerMockMvcTest {
   }
 
   @Test
+  @DisplayName("Given storeId, when getStore is called, then return store")
+  void getStore_returnsStore() throws Exception {
+    // Given
+    String storeId = "abc123";
+    StoreDto mockDto = new StoreDto();
+    StoreResponse mockResponse = new StoreResponse();
+
+    when(storeService.getStore(storeId)).thenReturn(mockDto);
+    when(storeDtoMapper.toStoreResponse(mockDto)).thenReturn(mockResponse);
+
+    // When & Then
+    mockMvc
+        .perform(get("/api/v1/stores/{storeId}", storeId).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+  }
+
+  @Test
   @DisplayName("Given storeId and request, when modifyStore is called, then return updated store")
   void modifyStore_returnsModifiedStore() throws Exception {
     // Given
