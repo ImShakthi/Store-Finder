@@ -73,7 +73,7 @@ public class StoreInfoService {
     final var store =
         storeRepository.findByStoreId(storeId).orElseThrow(StoreNotFoundException::new);
 
-    final var operationStatus = store.isStoreOpen() ? "OPEN" : "CLOSED";
+    final var operationStatus = store.isOpen() ? "OPEN" : "CLOSED";
 
     return StoreOperationStatusDto.builder()
         .storeId(storeId)

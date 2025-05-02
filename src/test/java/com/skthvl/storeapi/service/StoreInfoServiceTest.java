@@ -87,7 +87,7 @@ class StoreInfoServiceTest {
     final String storeId = "store-12345";
     final var store = mock(Store.class);
     when(storeRepository.findByStoreId(storeId)).thenReturn(java.util.Optional.of(store));
-    when(store.isStoreOpen()).thenReturn(true);
+    when(store.isOpen()).thenReturn(true);
     when(store.getTodayOpen()).thenReturn(java.time.LocalTime.of(9, 0));
     when(store.getTodayClose()).thenReturn(java.time.LocalTime.of(21, 0));
 

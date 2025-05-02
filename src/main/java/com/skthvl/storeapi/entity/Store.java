@@ -1,6 +1,5 @@
 package com.skthvl.storeapi.entity;
 
-import static java.util.Objects.isNull;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -86,20 +85,33 @@ public class Store extends Auditable {
   private LocalTime todayClose;
 
   /** Check if store is closed based on operating hours. */
-  public boolean isStoreClosed() {
-    return isNull(todayOpen) && isNull(todayClose);
+  public boolean isClosed() {
+    return !isOpen();
   }
 
   public double getLongitude() {
-    return location.getCoordinate().x;
+    return location.getCoordinate().getX();
   }
 
   public double getLatitude() {
-    return location.getCoordinate().y;
+    return location.getCoordinate().getY();
   }
 
-  public boolean isStoreOpen() {
+  /**
+   * Determines if the store is currently open based on today's operating hours.
+   *
+   * @return true if the current time is within the store's operating hours, and both opening and
+   *     closing times are defined; false otherwise.
+   */
+  public boolean isOpen() {
+    if (todayOpen == null || todayClose == null) {
+      return false;
+    }
     final var now = LocalTime.now();
-    return now.isAfter(todayOpen) && now.isBefore(todayClose);
+    return isWithinOperatingHours(now);
+  }
+
+  private boolean isWithinOperatingHours(LocalTime time) {
+    return !time.isBefore(todayOpen) && time.isBefore(todayClose);
   }
 }
